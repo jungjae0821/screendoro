@@ -1,0 +1,34 @@
+{
+  "name": "screendoro-skills",
+  "owner": { "name": "jungjae0821" },
+  "metadata": {
+    "description": "screendoro 프론트엔드 워크플로 스킬과, 이 스킬이 부르는 원작자 플러그인 목록"
+  },
+  "plugins": [
+    {
+      "name": "screendoro",
+      "source": "./plugins/screendoro",
+      "description": "프론트엔드 화면 작업 순서를 강제하는 워크플로 스킬 (impeccable → 랜딩 전략 → frontend-design → antislop·렌더링 검증)"
+    },
+    {
+      "name": "impeccable",
+      "source": { "source": "git-subdir", "url": "pbakaus/impeccable", "path": "plugin" },
+      "description": "원작자 저장소: github.com/pbakaus/impeccable (Apache-2.0)"
+    },
+    {
+      "name": "antislop",
+      "source": { "source": "github", "repo": "miqdadbadjuber/anti-slop" },
+      "description": "원작자 저장소: github.com/miqdadbadjuber/anti-slop (MIT)"
+    },
+    {
+      "name": "web-quality-skills",
+      "source": { "source": "github", "repo": "addyosmani/web-quality-skills" },
+      "description": "원작자 저장소: github.com/addyosmani/web-quality-skills (MIT)"
+    },
+    {
+      "name": "frontend-design",
+      "source": { "source": "git-subdir", "url": "anthropics/claude-plugins-official", "path": "plugins/frontend-design" },
+      "description": "원작자 저장소: github.com/anthropics/claude-plugins-official"
+    }
+  ]
+}
