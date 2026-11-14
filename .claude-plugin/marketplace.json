@@ -27,8 +27,8 @@
     {
       "name": "antislop",
       "source": {
-        "source": "github",
-        "repo": "miqdadbadjuber/anti-slop"
+        "source": "url",
+        "url": "https://github.com/miqdadbadjuber/anti-slop.git"
       },
       "description": "AI가 만든 티가 나는 UI·문구·코드 패턴(슬롭)을 잡아내는 점검 스킬 6종. 코어 + UI, 문구, 모바일 레이아웃, 접근성(명암비 검사 MCP 포함), 코드 주석. screendoro 4단계(최종 검증)에서 쓴다.",
       "homepage": "https://github.com/miqdadbadjuber/anti-slop",
@@ -38,8 +38,8 @@
     {
       "name": "web-quality-skills",
       "source": {
-        "source": "github",
-        "repo": "addyosmani/web-quality-skills"
+        "source": "url",
+        "url": "https://github.com/addyosmani/web-quality-skills.git"
       },
       "description": "웹 품질 점검 스킬 6종. Lighthouse 기준 종합 감사, 성능, Core Web Vitals, 접근성(WCAG 2.2), SEO, 보안·호환성 best practices. screendoro 4단계에서 랜딩·공개 페이지를 점검할 때 쓴다.",
       "homepage": "https://github.com/addyosmani/web-quality-skills",
