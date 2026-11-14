@@ -12,7 +12,7 @@
     },
     {
       "name": "impeccable",
-      "source": { "source": "git-subdir", "url": "pbakaus/impeccable", "path": "plugin" },
+      "source": { "source": "git-subdir", "url": "https://github.com/pbakaus/impeccable.git", "path": "plugin" },
       "description": "원작자 저장소: github.com/pbakaus/impeccable (Apache-2.0)"
     },
     {
@@ -27,7 +27,7 @@
     },
     {
       "name": "frontend-design",
-      "source": { "source": "git-subdir", "url": "anthropics/claude-plugins-official", "path": "plugins/frontend-design" },
+      "source": { "source": "git-subdir", "url": "https://github.com/anthropics/claude-plugins-official.git", "path": "plugins/frontend-design" },
       "description": "원작자 저장소: github.com/anthropics/claude-plugins-official"
     }
   ]
