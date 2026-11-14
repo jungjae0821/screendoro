@@ -9,14 +9,29 @@ claude plugin marketplace add jungjae0821/screendoro-skills
 claude plugin install screendoro@screendoro-skills
 ```
 
+## 들어 있는 플러그인
+
+**screendoro** (이 저장소)
+프론트엔드 화면 작업 순서를 강제하는 워크플로 스킬입니다. 새 화면·페이지를 만들거나 화면을 크게 재구성할 때 씁니다.
+
+| 단계 | 하는 일 | 쓰는 플러그인 |
+|---|---|---|
+| 0 | 프로젝트 마커(`.claude/screendoro.json`)로 최초 구성 여부 확인 | — |
+| 1 | 최초 환경 구성: 디자인 방향을 시안 HTML로 비교해 고르고 `DESIGN.md`·토큰에 기록 (프로젝트당 1회, 원하면 갤러리 레퍼런스 활용) | impeccable |
+| 2 | 랜딩·마케팅 페이지면 기획·구조·문구를 먼저 정리 | — |
+| 3 | 화면 작성 | frontend-design |
+| 4 | 슬롭 점검, 실제 렌더링 검증(모바일·태블릿·데스크톱), 공개 페이지면 웹 품질 점검 | antislop, web-quality-skills |
+
 screendoro를 설치하면 아래 플러그인도 각 원작자 저장소에서 함께 설치됩니다.
 
-| 플러그인 | 원작자 저장소 | 라이선스 |
-|---|---|---|
-| impeccable | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | Apache-2.0 |
-| antislop | [miqdadbadjuber/anti-slop](https://github.com/miqdadbadjuber/anti-slop) | MIT |
-| web-quality-skills | [addyosmani/web-quality-skills](https://github.com/addyosmani/web-quality-skills) | MIT |
-| frontend-design | [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) | 원 저장소 참고 |
+| 플러그인 | 하는 일 | 원작자 저장소 | 라이선스 |
+|---|---|---|---|
+| impeccable | 디자인 방향 설정, 리디자인, 비평·감사, 다듬기, 애니메이션, 디자인 시스템(DESIGN.md) 정리 | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | Apache-2.0 |
+| antislop | AI 티가 나는 패턴을 잡는 점검 스킬 6종: 코어, UI, 문구, 모바일 레이아웃, 접근성(명암비 검사 MCP 포함), 코드 주석 | [miqdadbadjuber/anti-slop](https://github.com/miqdadbadjuber/anti-slop) | MIT |
+| web-quality-skills | 웹 품질 점검 스킬 6종: 종합 감사, 성능, Core Web Vitals, 접근성(WCAG 2.2), SEO, best practices | [addyosmani/web-quality-skills](https://github.com/addyosmani/web-quality-skills) | MIT |
+| frontend-design | Anthropic 공식 프론트엔드 디자인 지침: 미적 방향, 타이포그래피, 템플릿 느낌 피하기 | [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) | Apache-2.0 |
+
+플러그인으로 설치한 스킬은 `antislop:antislop-ui`처럼 앞에 플러그인 이름이 붙습니다.
 
 이 저장소에는 원작자 코드를 복사해 두지 않았고, `marketplace.json`에서 원작자 저장소를 가리키기만 합니다. 버전을 고정하지 않아서 항상 원작자의 최신판이 설치됩니다.
 

@@ -1,6 +1,8 @@
 {
   "name": "screendoro-skills",
-  "owner": { "name": "jungjae0821" },
+  "owner": {
+    "name": "jungjae0821"
+  },
   "metadata": {
     "description": "screendoro 프론트엔드 워크플로 스킬과, 이 스킬이 부르는 원작자 플러그인 목록"
   },
@@ -8,27 +10,53 @@
     {
       "name": "screendoro",
       "source": "./plugins/screendoro",
-      "description": "프론트엔드 화면 작업 순서를 강제하는 워크플로 스킬 (impeccable → 랜딩 전략 → frontend-design → antislop·렌더링 검증)"
+      "description": "프론트엔드 화면 작업 순서를 강제하는 워크플로 스킬. 최초 환경 구성(impeccable, 시안 3개 비교) → 랜딩 전략 → frontend-design으로 화면 작성 → antislop·렌더링 검증 순서로 진행한다."
     },
     {
       "name": "impeccable",
-      "source": { "source": "git-subdir", "url": "https://github.com/pbakaus/impeccable.git", "path": "plugin" },
-      "description": "원작자 저장소: github.com/pbakaus/impeccable (Apache-2.0)"
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/pbakaus/impeccable.git",
+        "path": "plugin"
+      },
+      "description": "프론트엔드 디자인 스킬. 디자인 방향 설정, 리디자인, 비평·감사, 다듬기, 애니메이션, DESIGN.md·토큰 같은 디자인 시스템 정리를 맡는다. screendoro 1단계(최초 환경 구성)에서 쓴다.",
+      "homepage": "https://github.com/pbakaus/impeccable",
+      "repository": "https://github.com/pbakaus/impeccable",
+      "license": "Apache-2.0"
     },
     {
       "name": "antislop",
-      "source": { "source": "github", "repo": "miqdadbadjuber/anti-slop" },
-      "description": "원작자 저장소: github.com/miqdadbadjuber/anti-slop (MIT)"
+      "source": {
+        "source": "github",
+        "repo": "miqdadbadjuber/anti-slop"
+      },
+      "description": "AI가 만든 티가 나는 UI·문구·코드 패턴(슬롭)을 잡아내는 점검 스킬 6종. 코어 + UI, 문구, 모바일 레이아웃, 접근성(명암비 검사 MCP 포함), 코드 주석. screendoro 4단계(최종 검증)에서 쓴다.",
+      "homepage": "https://github.com/miqdadbadjuber/anti-slop",
+      "repository": "https://github.com/miqdadbadjuber/anti-slop",
+      "license": "MIT"
     },
     {
       "name": "web-quality-skills",
-      "source": { "source": "github", "repo": "addyosmani/web-quality-skills" },
-      "description": "원작자 저장소: github.com/addyosmani/web-quality-skills (MIT)"
+      "source": {
+        "source": "github",
+        "repo": "addyosmani/web-quality-skills"
+      },
+      "description": "웹 품질 점검 스킬 6종. Lighthouse 기준 종합 감사, 성능, Core Web Vitals, 접근성(WCAG 2.2), SEO, 보안·호환성 best practices. screendoro 4단계에서 랜딩·공개 페이지를 점검할 때 쓴다.",
+      "homepage": "https://github.com/addyosmani/web-quality-skills",
+      "repository": "https://github.com/addyosmani/web-quality-skills",
+      "license": "MIT"
     },
     {
       "name": "frontend-design",
-      "source": { "source": "git-subdir", "url": "https://github.com/anthropics/claude-plugins-official.git", "path": "plugins/frontend-design" },
-      "description": "원작자 저장소: github.com/anthropics/claude-plugins-official"
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/anthropics/claude-plugins-official.git",
+        "path": "plugins/frontend-design"
+      },
+      "description": "Anthropic 공식 프론트엔드 디자인 지침. 뻔한 템플릿 느낌을 피하는 미적 방향, 타이포그래피, 레이아웃 선택을 안내한다. screendoro 3단계(화면 작성)에서 쓴다.",
+      "homepage": "https://github.com/anthropics/claude-plugins-official",
+      "repository": "https://github.com/anthropics/claude-plugins-official",
+      "license": "Apache-2.0"
     }
   ]
 }
