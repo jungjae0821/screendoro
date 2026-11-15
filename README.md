@@ -19,8 +19,10 @@ claude plugin install screendoro@screendoro-skills
 | 0 | 프로젝트 마커(`.claude/screendoro.json`)로 최초 구성 여부 확인 | — |
 | 1 | 최초 환경 구성: 디자인 방향을 시안 HTML로 비교해 고르고 `DESIGN.md`·토큰에 기록 (프로젝트당 1회, 원하면 갤러리 레퍼런스 활용) | impeccable |
 | 2 | 랜딩·마케팅 페이지면 기획·구조·문구를 먼저 정리 | — |
-| 3 | 화면 작성 | frontend-design |
-| 4 | 슬롭 점검, 실제 렌더링 검증(모바일·태블릿·데스크톱), 공개 페이지면 웹 품질 점검 | antislop, web-quality-skills |
+| 3 | 화면 작성 (고정 규칙 적용: 경기천년체, 둥근 버튼, 이중 테두리·불필요한 밑줄·장식 금지) | frontend-design |
+| 4 | 슬롭 점검, 고정 규칙 위반 점검·삭제, 실제 렌더링 검증(모바일·태블릿·데스크톱), 공개 페이지면 웹 품질 점검 | antislop, web-quality-skills |
+
+고정 규칙은 `references/house-rules.md`에 있고, 4단계 점검 스크립트는 `references/house-check.js`입니다.
 
 screendoro를 설치하면 아래 플러그인도 각 원작자 저장소에서 함께 설치됩니다.
 

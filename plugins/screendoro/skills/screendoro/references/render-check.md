@@ -31,6 +31,7 @@ screendoro 4단계에서 **실제로 화면을 띄워서** 확인하는 절차�
   ```js
   const w = document.documentElement.clientWidth; [...document.querySelectorAll('body *')].filter(e => e.getBoundingClientRect().right > w + 1).slice(0, 10).map(e => e.tagName + '.' + e.className)
   ```
+- 고정 규칙: `references/house-check.js`를 실행해 이중 테두리, 밑줄, 각진 버튼, 경기천년체 적용 여부를 확인한다 (`house-rules.md` 5절).
 - 글자·요소 겹침, 잘린 문구, 화면 밖으로 나간 버튼
 - 한국어 줄바꿈이 단어 중간에서 끊기지 않는지 (`word-break: keep-all`)
 - 모바일 터치 대상이 손가락으로 누를 만한 크기인지
