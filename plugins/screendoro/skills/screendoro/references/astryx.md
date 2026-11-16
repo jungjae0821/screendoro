@@ -99,7 +99,7 @@ Astryx는 베타라 명령과 토큰 이름이 바뀔 수 있다. 이 문서에 
 | 전달 전에 빌드한다 | 4단계 렌더링 검증으로 대신한다 |
 
 - Astryx 플러그인(`astryx@astryx`)과 전역 설치(`npm i -g @astryxdesign/cli`)는 사용자에게 묻지 않고 하지 않는다. 둘 다 Astryx를 쓰지 않는 프로젝트에서도 Astryx 안내가 발동하게 만든다.
-- screendoro의 단계 순서(0 → 1 → 2 → 3 → 4)는 Astryx 안내 때문에 바뀌지 않는다.
+- screendoro의 단계 순서(0 → 0-1 → 1 → 2 → 3 → 4)는 Astryx 안내 때문에 바뀌지 않는다.
 
 ## 6. 검증 (4단계)
 
