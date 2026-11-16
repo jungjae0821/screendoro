@@ -2,8 +2,9 @@
 
 screendoro 사용자가 **모든 프로젝트**에 적용하는 화면 규칙이다. 1·3단계에서 화면에 반영하고, 4단계에서 위반을 찾아 고친다.
 
-우선순위: 사용자 지시 > **이 문서** > 프로젝트 `DESIGN.md` > 다른 `references/` 문서 > `frontend-design`·`impeccable` 기본값.
+우선순위: 사용자 지시 > **이 문서** > 프로젝트 `DESIGN.md` > 다른 `references/` 문서 > `frontend-design`·`impeccable` 기본값 > Astryx 기본값.
 `DESIGN.md`나 `landing-visual-preset.md`가 이 문서와 다르면 이 문서를 따른다. `DESIGN.md`에 이유가 적혀 있어도 마찬가지다.
+Astryx 같은 컴포넌트 라이브러리를 쓰는 프로젝트에서도 똑같이 적용한다. 라이브러리의 기본 모양이 이 문서와 다르면 테마나 덮어쓰기로 이 문서에 맞춘다 (`astryx.md` 3·6절).
 
 ---
 

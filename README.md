@@ -24,6 +24,9 @@ claude plugin install screendoro@screendoro-skills
 
 고정 규칙은 `references/house-rules.md`에 있고, 4단계 점검 스크립트는 `references/house-check.js`입니다.
 
+**Astryx (선택)**
+React 19 이상 프로젝트에서는 최초 구성 때 [Astryx](https://github.com/meta/astryx)(Meta의 오픈소스 디자인 시스템, 베타, MIT)를 컴포넌트 라이브러리로 쓸지 한 번 묻습니다. 기본값은 쓰지 않음입니다. 쓰기로 하면 0단계에서 마커에 기록하고, 1단계에서 `DESIGN.md`와 고정 규칙을 Astryx 테마 토큰으로 옮기고, 3단계에서 CLI로 컴포넌트를 조회해 조립하고, 4단계에서 Astryx 컴포넌트에도 고정 규칙을 똑같이 검사합니다. 절차는 `references/astryx.md`에 있습니다. Astryx는 플러그인이 아니라 프로젝트의 npm 의존성으로 설치되므로 아래 의존 플러그인 목록에는 없습니다.
+
 screendoro를 설치하면 아래 플러그인도 각 원작자 저장소에서 함께 설치됩니다.
 
 | 플러그인 | 하는 일 | 원작자 저장소 | 라이선스 |

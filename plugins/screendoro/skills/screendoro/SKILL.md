@@ -7,9 +7,11 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
 
 프론트엔드 작업은 아래 단계를 **이 순서대로** 반드시 지킨다. 단계를 건너뛰거나 순서를 바꾸지 않는다. 2단계만 예외로, 랜딩·마케팅 페이지일 때만 수행한다.
 
-우선순위: 사용자 지시 > `references/house-rules.md`(고정 규칙) > 프로젝트 `DESIGN.md` > 다른 `references/` 문서 > `frontend-design` 기본값.
+우선순위: 사용자 지시 > `references/house-rules.md`(고정 규칙) > 프로젝트 `DESIGN.md` > 다른 `references/` 문서 > `frontend-design` 기본값 > Astryx 기본값.
 
 고정 규칙: `references/house-rules.md`는 모든 프로젝트에 적용하는 사용자 규칙이다(경기천년체, 둥근 버튼, 이중 테두리 금지, 불필요한 밑줄·요소 금지). 1·3단계에서 반영하고 4단계에서 위반을 찾아 고친다.
+
+컴포넌트 라이브러리(선택): 마커의 `componentLib`이 `"astryx"`인 프로젝트에서만 `references/astryx.md`를 읽고 따른다. Astryx는 부품과 테마 엔진만 맡고, 단계 순서와 고정 규칙은 바뀌지 않는다. 그 외 프로젝트에서는 이 문서를 읽지 않는다.
 
 적용 범위: 새 화면·페이지를 만들거나 화면을 크게 재구성하는 작업에만 쓴다. 문구, 색·간격, 버그 수정 같은 작은 변경은 이 워크플로 없이 `DESIGN.md`와 고정 규칙에 맞춰 바로 고친다.
 
@@ -40,6 +42,11 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
 - 랜딩 페이지, 마케팅 사이트, 제품 소개·가입 유도 페이지 → **랜딩 작업**. 2단계를 수행한다.
 - 대시보드, 앱 화면, 설정, 일반 컴포넌트 등 그 외 → 2단계를 건너뛰고 3단계로 간다.
 - 애매하면 사용자에게 한 번 묻는다.
+
+마지막으로 **컴포넌트 라이브러리**를 판별한다. 마커에 `componentLib`이 있으면 그 값을 따르고, 없으면 `references/astryx.md` 1절의 표대로 정한다.
+
+- 1단계를 수행하는 프로젝트(최초 구성)이면서 React 19 이상이거나 프레임워크를 아직 정하지 않았을 때만 Astryx를 쓸지 한 번 묻는다. 기본값은 **쓰지 않음**이다.
+- 그 외에는 묻지 않는다. `package.json`에 `@astryxdesign/core`가 있으면 Astryx 프로젝트로 보고, 나머지는 쓰지 않는 것으로 본다.
 
 ## 1. 최초 환경 구성 — `impeccable` (프로젝트당 1회)
 
@@ -76,12 +83,13 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
 3. 비교 페이지를 브라우저 패널에 띄워 사용자에게 보여준다.
 4. AskUserQuestion 도구로 시안 하나를 고르게 한다. 사용자는 "A의 레이아웃에 B의 색" 같은 조합(레퍼런스 기반과 자체 방향을 섞는 것도 포함)이나 다시 그리기를 요청할 수 있다. 다시 그리면 이미 보여준 방향은 빼고 같은 방식, 같은 개수로 새로 만든다. 방식을 바꿔 달라고 하면 0번부터 다시 한다.
 5. 고른 시안의 값(색, 폰트, 간격, 레이아웃 구조)을 `DESIGN.md`에 **값마다 이유와 함께** 기록하고 토큰으로 옮긴 뒤 환경 구성을 마친다. impeccable이 자체 방향 선택 화면을 띄웠더라도 이 HTML 시안 선택은 생략하지 않는다. 같은 방향 후보를 쓰면 된다.
+6. **Astryx 프로젝트면** (0단계에서 `componentLib`이 `"astryx"`로 정해졌으면) 시안을 고른 뒤 `references/astryx.md` 2~3절을 수행한다. Astryx를 설치해 연결하고, `DESIGN.md` 값과 고정 규칙(경기천년체, 버튼 반경)을 Astryx 테마 토큰으로 옮긴다. 시안 자체는 Astryx 없이 정적 HTML로 그린다.
 
-- 구성이 끝나면 프로젝트 루트에 마커를 기록한다. 프리셋을 고르지 않았으면 `visualPreset`은 빼거나 `null`로 둔다. `mockMode`에는 고른 방식(`none` / `reference` / `both`)을, `mockChoice`에는 고른 시안과 한 줄 요약을, `references`에는 확정한 레퍼런스 URL을 적는다. 레퍼런스를 쓰지 않았거나 레퍼런스 기반이 아닌 시안을 골랐으면 `references`와 `refsNote`는 빼도 된다.
+- 구성이 끝나면 프로젝트 루트에 마커를 기록한다. 프리셋을 고르지 않았으면 `visualPreset`은 빼거나 `null`로 둔다. `mockMode`에는 고른 방식(`none` / `reference` / `both`)을, `mockChoice`에는 고른 시안과 한 줄 요약을, `references`에는 확정한 레퍼런스 URL을 적는다. 레퍼런스를 쓰지 않았거나 레퍼런스 기반이 아닌 시안을 골랐으면 `references`와 `refsNote`는 빼도 된다. `componentLib`에는 `"astryx"` 또는 `"none"`을 적고, Astryx를 쓰면 `astryxTheme`에 바탕으로 삼은 테마 이름을 적는다.
 
   ```json
   // .claude/screendoro.json
-  { "impeccableDone": true, "date": "YYYY-MM-DD", "visualPreset": "landing-visual-preset", "mockMode": "both", "mockChoice": "B - 신문 지면형 그리드, 크림 배경, 세리프 제목", "references": ["https://..."], "refsNote": ".claude/screendoro-refs.md" }
+  { "impeccableDone": true, "date": "YYYY-MM-DD", "visualPreset": "landing-visual-preset", "mockMode": "both", "mockChoice": "B - 신문 지면형 그리드, 크림 배경, 세리프 제목", "references": ["https://..."], "refsNote": ".claude/screendoro-refs.md", "componentLib": "astryx", "astryxTheme": "neutral" }
   ```
 
 - 이후 이 프로젝트의 어떤 화면 작업에서도 `impeccable`을 **다시 쓰지 않는다**.
@@ -106,6 +114,7 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
   - 이중 테두리 금지
   - 불필요한 밑줄과 장식 요소 금지
 - 그 지침에 따라 구현한다. 1단계에서 정한 디자인 방향·토큰(`DESIGN.md`)이 있으면 그것과 일관되게 맞춘다.
+- **Astryx 프로젝트면** 화면 코드를 쓰기 전에 `references/astryx.md` 4~5절을 읽는다 (이 세션에서 이미 읽었으면 생략). 부품은 CLI로 조회해서 Astryx 것을 쓰고, 색과 치수는 테마 토큰을 쓴다. Astryx가 프로젝트에 써 넣은 안내와 이 문서가 다르면 이 문서를 따른다.
 - 랜딩 작업이면 2단계 결과물과 섹션 순서를 따라 섹션 단위로 구현한다.
 - 여러 화면을 만들 때도 모든 화면에 이 지침을 적용한다 (스킬은 한 번만 불러온다).
 - **레퍼런스 요청 시**: 사용자가 레퍼런스 URL을 주거나 레퍼런스를 찾아 달라고 하면, 화면 코드 전에 `references/design-reference.md`를 읽고 수행한다. URL을 받았으면 B·C를 건너뛰고 D부터 한다. 뽑은 패턴은 `DESIGN.md`와 충돌하지 않는 범위에서만 쓰고, 충돌하면 어느 쪽을 따를지 사용자에게 묻는다. 노트는 `.claude/screendoro-refs.md`에 이어 쓴다.
@@ -128,6 +137,7 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
    - 그 외 AI 슬롭 패턴은 `antislop` 코어가 꼽는 패턴 전체로 화면 전체를 검사한다. 하위 스킬 영역 밖의 패턴도 빠뜨리지 않는다.
    - 렌더링 검증 때 폭마다 `references/house-check.js`도 실행한다.
    - 랜딩 작업이면 `references/landing-strategy.md` 끝의 체크리스트도 함께 돌린다. 마커에 `visualPreset`이 있으면 `references/landing-visual-preset.md` 끝의 체크리스트도 돌린다.
+   - Astryx 프로젝트면 `references/astryx.md` 6절과 끝의 체크리스트도 함께 돌린다. Astryx 컴포넌트에서 나온 고정 규칙 위반도 필수 항목이고, 테마 토큰 → `className` → `swizzle`(사용자에게 물은 뒤) 순으로 고친다.
 4. **렌더링 검증**: `references/render-check.md`를 읽고 그대로 수행한다. 만든 화면을 실제로 띄워 모바일·태블릿·데스크톱 폭에서 캡처하고, 가로 스크롤, 콘솔 오류, 실패한 요청, 핵심 상호작용을 확인한다.
    - 랜딩·공개 페이지(검색 노출이나 첫 로딩 속도가 중요한 페이지)면 `web-quality-audit` 스킬을 불러와 성능·SEO·best practices 기준도 함께 적용한다. 로그인 뒤 앱 화면에는 불러오지 않는다.
    - `web-quality-audit`가 링크하는 하위 스킬(`accessibility`, `performance` 등)은 따로 불러오지 않는다. 필요한 부분만 그 파일을 읽는다. 접근성 판단은 `antislop-human`과 중복되므로, 둘이 다르면 더 엄격한 쪽을 따른다.
@@ -148,6 +158,7 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
 - 수정: 고친 필수 항목 수와 대표 항목 1~2개 (고정 규칙 위반을 고쳤으면 따로 표시)
 - 남은 권장 항목: 있으면 짧은 목록, 없으면 생략
 - 1단계를 수행했으면 시안 방식, 고른 시안 한 줄, 레퍼런스 기반이면 근거 번호
+- Astryx 프로젝트면 "단계" 줄에 Astryx 사용을 적고, `swizzle`한 컴포넌트가 있으면 이름을 적는다
 
 ## 금지 사항
 
@@ -170,3 +181,7 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
 - 사용자가 레퍼런스 방식을 고르지 않았는데 레퍼런스를 수집하지 않는다. 마커가 있는 프로젝트에서도 요청 없이는 하지 않는다.
 - **레퍼런스 없이** 방식에서 레퍼런스 노트나 갤러리를 시안 근거로 쓰지 않는다.
 - 1-1 시안 선택은 최초 구성 때만 한다. 마커가 있는 프로젝트의 이후 화면 작업에서는 사용자가 요청하지 않는 한 시안을 그리지 않는다.
+- 사용자가 고르지 않았는데 Astryx를 설치하지 않는다. 마커의 `componentLib`이 `"astryx"`가 아닌 프로젝트에 `references/astryx.md`를 적용하지 않는다.
+- CLI를 설치하기 전에 `npx astryx`를 실행하지 않는다. 항상 `npx @astryxdesign/cli`를 쓴다.
+- Astryx 컴포넌트의 props와 토큰 이름을 기억으로 쓰지 않는다. CLI로 조회해서 쓴다.
+- Astryx 플러그인 설치, 전역 설치, `swizzle`을 사용자에게 묻지 않고 하지 않는다.
