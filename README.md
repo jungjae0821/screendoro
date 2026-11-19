@@ -18,15 +18,15 @@ claude plugin install screendoro@screendoro-skills
 |---|---|---|
 | 0 | 프로젝트 마커(`.claude/screendoro.json`)로 최초 구성 여부 확인 | — |
 | 0-1 | 초안 맞추기: 사용자의 초안(요소와 순서, 가장 중요한 것, 레퍼런스)을 먼저 받고, AI 구조안과 다른 부분을 사용자가 판정 (새 화면마다, "초안 없이"로 건너뛸 수 있음) | — |
-| 1 | 최초 환경 구성: 디자인 방향을 시안 HTML로 비교해 고르고 `DESIGN.md`·토큰에 기록 (프로젝트당 1회, 원하면 갤러리 레퍼런스 활용) | impeccable |
-| 2 | 랜딩·마케팅 페이지면 기획·구조·문구를 먼저 정리 | — |
+| 1 | 랜딩·마케팅 페이지면 기획·구조·문구를 먼저 정리 | — |
+| 2 | 최초 환경 구성: 디자인 방향을 시안 HTML로 비교해 고르고 `DESIGN.md`·토큰에 기록 (프로젝트당 1회, 원하면 갤러리 레퍼런스 활용) | impeccable |
 | 3 | 화면 작성 (고정 규칙 적용: 경기천년체, 둥근 버튼, 이중 테두리·불필요한 밑줄·장식 금지) | frontend-design |
 | 4 | 슬롭 점검, 고정 규칙 위반 점검·삭제, 실제 렌더링 검증(모바일·태블릿·데스크톱), 공개 페이지면 웹 품질 점검 | antislop, web-quality-skills |
 
 초안 절차는 `references/draft-first.md`에, 고정 규칙은 `references/house-rules.md`에 있고, 4단계 점검 스크립트는 `references/house-check.js`입니다.
 
 **Astryx (선택)**
-React 19 이상 프로젝트에서는 최초 구성 때 [Astryx](https://github.com/meta/astryx)(Meta의 오픈소스 디자인 시스템, 베타, MIT)를 컴포넌트 라이브러리로 쓸지 한 번 묻습니다. 기본값은 쓰지 않음입니다. 쓰기로 하면 0단계에서 마커에 기록하고, 1단계에서 `DESIGN.md`와 고정 규칙을 Astryx 테마 토큰으로 옮기고, 3단계에서 CLI로 컴포넌트를 조회해 조립하고, 4단계에서 Astryx 컴포넌트에도 고정 규칙을 똑같이 검사합니다. 절차는 `references/astryx.md`에 있습니다. Astryx는 플러그인이 아니라 프로젝트의 npm 의존성으로 설치되므로 아래 의존 플러그인 목록에는 없습니다.
+React 19 이상 프로젝트에서는 최초 구성 때 [Astryx](https://github.com/meta/astryx)(Meta의 오픈소스 디자인 시스템, 베타, MIT)를 컴포넌트 라이브러리로 쓸지 한 번 묻습니다. 기본값은 쓰지 않음입니다. 쓰기로 하면 0단계에서 마커에 기록하고, 2단계에서 `DESIGN.md`와 고정 규칙을 Astryx 테마 토큰으로 옮기고, 3단계에서 CLI로 컴포넌트를 조회해 조립하고, 4단계에서 Astryx 컴포넌트에도 고정 규칙을 똑같이 검사합니다. 절차는 `references/astryx.md`에 있습니다. Astryx는 플러그인이 아니라 프로젝트의 npm 의존성으로 설치되므로 아래 의존 플러그인 목록에는 없습니다.
 
 screendoro를 설치하면 아래 플러그인도 각 원작자 저장소에서 함께 설치됩니다.
 

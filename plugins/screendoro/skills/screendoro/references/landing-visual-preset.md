@@ -1,6 +1,6 @@
 # 시각 프리셋 (landing-visual-preset)
 
-screendoro 1단계(`impeccable`)에서 디자인 방향을 정할 때 **고를 수 있는 선택지 하나**다. 강제 규칙이 아니다. 사용자가 이 프리셋을 고른 경우에만 쓴다.
+screendoro 2단계(`impeccable`)에서 디자인 방향을 정할 때 **고를 수 있는 선택지 하나**다. 강제 규칙이 아니다. 사용자가 이 프리셋을 고른 경우에만 쓴다.
 출처: elayadesign/ai-design-skills `landing-page-design` (MIT)의 B1~B7. 한국어 작업과 antislop 검증에 맞게 고쳤다. 라이선스는 `LICENSE-landing-page-design` 참고.
 
 **성격**: Tailwind 기반, 무채색 중심, 다크 톤 SaaS 랜딩. 절제된 타이포, 촘촘한 간격 체계, 무게감 있게 감속하는 모션.

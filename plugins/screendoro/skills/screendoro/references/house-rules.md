@@ -1,6 +1,6 @@
 # 고정 규칙 (house-rules)
 
-screendoro 사용자가 **모든 프로젝트**에 적용하는 화면 규칙이다. 1·3단계에서 화면에 반영하고, 4단계에서 위반을 찾아 고친다.
+screendoro 사용자가 **모든 프로젝트**에 적용하는 화면 규칙이다. 2·3단계에서 화면에 반영하고, 4단계에서 위반을 찾아 고친다.
 
 우선순위: 사용자 지시 > **이 문서** > 프로젝트 `DESIGN.md` > 다른 `references/` 문서 > `frontend-design`·`impeccable` 기본값 > Astryx 기본값.
 `DESIGN.md`나 `landing-visual-preset.md`가 이 문서와 다르면 이 문서를 따른다. `DESIGN.md`에 이유가 적혀 있어도 마찬가지다.
