@@ -1,6 +1,6 @@
 ---
 name: screendoro
-description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 필수 순서를 강제하는 워크플로 스킬. 새 화면마다 사용자의 초안(요소와 순서, 가장 중요한 것, 레퍼런스)을 먼저 받고 AI 구조안과 다른 부분을 사용자가 판정한 뒤에 진행하고, 랜딩·마케팅 페이지면 랜딩 전략(기획·구조·문구)을 먼저 세우고, 프로젝트 최초 프론트엔드 환경 구성 시에만 impeccable을 한 번 쓰고(이때 사용자가 고르면 SiteInspire·Awwwards·GDWEB 같은 갤러리의 디자인 레퍼런스를 시안의 근거로 쓰고), 모든 화면 작성은 frontend-design:frontend-design 지침으로, 최종 완료 전에는 antislop 계열 스킬로 슬롭을 점검해 고친다. 새 화면·페이지(웹페이지, 랜딩, 대시보드 등)를 만들거나 화면을 크게 재구성할 때, 또는 /screendoro로 호출할 때만 사용한다. 화면 작업 중 사용자가 레퍼런스 URL을 주거나 레퍼런스를 찾아 달라고 할 때도 쓴다. 문구 수정, 색·간격 조정, 버그 수정 같은 작은 UI 변경에는 사용하지 않는다.
+description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 필수 순서를 강제하는 워크플로 스킬. 새 화면마다 사용자의 초안(요소와 순서, 가장 중요한 것, 레퍼런스)을 먼저 받고 AI 구조안과 다른 부분을 사용자가 판정한 뒤에 진행하고, 랜딩·마케팅 페이지면 랜딩 전략(기획·구조·문구)을 먼저 세우고, 프로젝트 최초 프론트엔드 환경 구성 시에만 자체 절차(references/design-setup.md)로 디자인 방향과 DESIGN.md를 한 번 정하고(이때 사용자가 고르면 SiteInspire·Awwwards·GDWEB 같은 갤러리의 디자인 레퍼런스를 시안의 근거로 쓰고), 모든 화면 작성은 frontend-design:frontend-design 지침으로, 최종 완료 전에는 antislop 계열 스킬로 슬롭을 점검해 고친다. 새 화면·페이지(웹페이지, 랜딩, 대시보드 등)를 만들거나 화면을 크게 재구성할 때, 또는 /screendoro로 호출할 때만 사용한다. 화면 작업 중 사용자가 레퍼런스 URL을 주거나 레퍼런스를 찾아 달라고 할 때도 쓴다. 문구 수정, 색·간격 조정, 버그 수정 같은 작은 UI 변경에는 사용하지 않는다.
 ---
 
 # Screendoro
@@ -21,7 +21,6 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
 
 | 이 문서의 이름 | 플러그인 설치 시 이름 |
 |---|---|
-| `impeccable` | `impeccable:impeccable` |
 | `frontend-design:frontend-design` | `frontend-design:frontend-design` (같음) |
 | `antislop`, `antislop-ui` 등 | `antislop:antislop`, `antislop:antislop-ui` 등 |
 | `web-quality-audit` | `web-quality-skills:web-quality-audit` |
@@ -32,10 +31,10 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
 
 프로젝트 루트에서 `.claude/screendoro.json` 마커 파일을 확인한다.
 
-- 파일이 있고 `"impeccableDone": true` 이면 → 2단계를 건너뛴다.
+- 파일이 있고 `"setupDone": true` 이면 → 2단계를 건너뛴다. 예전 버전이 기록한 `"impeccableDone": true`도 같은 뜻으로 본다.
 - 파일이 없으면 → 이 프로젝트에 이미 프론트엔드 환경이 있는지 본다 (`package.json`의 프론트엔드 의존성, `src/` 아래 컴포넌트, `index.html`, `DESIGN.md`, 디자인 토큰 파일 등).
   - 프론트엔드 환경이 **없다** → 2단계를 수행한다.
-  - 프론트엔드 환경이 **이미 있다** → 사용자에게 "이 프로젝트에서 impeccable 초기 구성을 이미 했는지" 한 번 묻고, 했다고 하면 마커만 기록한 뒤 2단계를 건너뛴다.
+  - 프론트엔드 환경이 **이미 있다** → 사용자에게 "이 프로젝트에서 디자인 방향과 `DESIGN.md` 초기 구성을 이미 했는지" 한 번 묻고, 했다고 하면 마커만 기록한 뒤 2단계를 건너뛴다.
 
 그다음 **작업 유형**을 판별한다.
 
@@ -74,9 +73,10 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
 
 이 문서의 시각 값은 `DESIGN.md`보다 우선하지 않는다. 최초 구성 프로젝트라 `DESIGN.md`가 아직 없으면 레이아웃 선택은 구조 수준에서만 하고, 색·폰트 같은 시각 값은 2단계 시안에서 정한다.
 
-## 2. 최초 환경 구성 — `impeccable` (프로젝트당 1회)
+## 2. 최초 환경 구성 — `references/design-setup.md` (프로젝트당 1회)
 
-- 프로젝트에서 프론트엔드 환경을 **처음** 작성할 때만 `impeccable` 스킬을 Skill 도구로 불러와 그 지침대로 환경(디자인 방향, 토큰, 기본 구조 등)을 구성한다.
+- 프로젝트에서 프론트엔드 환경을 **처음** 작성할 때만 `references/design-setup.md`를 읽고 그 순서대로 환경(디자인 방향, `DESIGN.md`, 토큰, 기본 구조)을 구성한다.
+- 시안을 그리기 전에 `frontend-design:frontend-design` 스킬을 불러온다. 이 세션에서 이미 불러왔으면 다시 불러오지 않고, 3단계에서도 다시 불러오지 않는다.
 - 시작 전에 `references/house-rules.md`를 읽는다. 모든 시안과 `DESIGN.md`의 폰트는 경기천년체, 버튼 반경은 8px 이상으로 정하고, 이중 테두리와 불필요한 밑줄·요소는 시안에도 넣지 않는다. 시안끼리는 폰트가 같으므로 레이아웃, 색, 글자 크기·굵기 대비, 분위기로 차이를 낸다.
 - 디자인 방향을 정할 때, 사용자가 방향을 따로 정하지 않았다면 `references/landing-visual-preset.md`를 **선택지 중 하나로** 제시한다. 강제하지 않는다.
   - 고르면 그 파일의 "쓰는 법"대로 값을 `DESIGN.md`에 **값마다 이유와 함께** 옮겨 적는다.
@@ -84,7 +84,7 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
 
 ### 2-1. 시안 선택 (2단계 안에서, 프로젝트당 1회)
 
-디자인 방향을 `DESIGN.md`와 토큰에 확정하기 **전에**, 사용자가 직접 눈으로 보고 고르게 한다. impeccable의 이미지 시안(comp) 단계는 이미지 생성 도구가 없으면 실행되지 않으므로, 이미지 대신 HTML로 시안을 직접 그린다.
+디자인 방향을 `DESIGN.md`와 토큰에 확정하기 **전에**, 사용자가 직접 눈으로 보고 고르게 한다. 시안은 이미지가 아니라 HTML로 직접 그린다.
 
 0. **시안 방식 선택**: 시안을 그리기 전에 AskUserQuestion으로 한 번 묻는다. 레퍼런스는 참고 수단이지 필수가 아니다.
 
@@ -101,7 +101,7 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
    - 레퍼런스를 쓰는 방식이면 `references/design-reference.md`를 읽고 A~E를 수행한다. 갤러리 후보 6~9개를 보드로 보여주고, 사용자가 2~4개를 확정하면 패턴을 뽑아 `.claude/screendoro-refs.md`에 정리한다.
 
 1. 방식에 맞게 서로 **확연히 다른** 시안 방향을 고른다.
-   - **자체 방향**: impeccable 지침으로 뽑은 후보에서 고른다. 레퍼런스 노트를 보지 않는다.
+   - **자체 방향**: `design-setup.md` 3절로 만든 방향에서 고른다. 레퍼런스 노트를 보지 않는다.
    - **레퍼런스 기반**: 레퍼런스 노트의 "시안에 쓸 조합"을 바탕으로 고른다. 각 시안은 레퍼런스 2개 이상의 패턴을 조합하고, 비교 페이지 설명에 근거 번호를 단다.
    - **둘 다**: 자체 방향 2개는 레퍼런스 기반 2개와도 겹치지 않아야 한다. 같은 방향이 양쪽에 나오면 비교가 안 된다.
    - **내 초안 기반**: 모든 시안이 확정 구조(요소와 순서)를 지킨다. 시안끼리는 배치 방식(그리드, 정렬, 비율), 색, 타이포, 분위기로 차이를 낸다. 레퍼런스가 1개뿐이면 "2개 이상 조합" 규칙을 적용하지 않고, 사용자가 가져오고 싶다고 한 점만 가져온다.
@@ -111,17 +111,17 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
    - 비교 페이지 `.claude/screendoro-mocks/index.html`에 시안을 탭이나 나란히 보기로 모으고, 각 시안 위에 이름과 한 줄 설명(방향, 장점, 위험)을 단다. **둘 다** 방식이면 "레퍼런스 기반"과 "자체 방향" 두 묶음으로 나눠 보여주고, 레퍼런스 기반 시안에는 근거 번호를 단다.
 3. 비교 페이지를 브라우저 패널에 띄워 사용자에게 보여준다.
 4. AskUserQuestion 도구로 시안 하나를 고르게 한다. 사용자는 "A의 레이아웃에 B의 색" 같은 조합(레퍼런스 기반과 자체 방향을 섞는 것도 포함)이나 다시 그리기를 요청할 수 있다. 다시 그리면 이미 보여준 방향은 빼고 같은 방식, 같은 개수로 새로 만든다. 방식을 바꿔 달라고 하면 0번부터 다시 한다.
-5. 고른 시안의 값(색, 폰트, 간격, 레이아웃 구조)을 `DESIGN.md`에 **값마다 이유와 함께** 기록하고 토큰으로 옮긴 뒤 환경 구성을 마친다. impeccable이 자체 방향 선택 화면을 띄웠더라도 이 HTML 시안 선택은 생략하지 않는다. 같은 방향 후보를 쓰면 된다.
+5. 고른 시안의 값(색, 폰트, 간격, 레이아웃 구조)을 `DESIGN.md`에 **값마다 이유와 함께** 기록하고 토큰으로 옮긴 뒤 환경 구성을 마친다. 그다음 `design-setup.md` 6절대로 기본 구조를 만든다.
 6. **Astryx 프로젝트면** (0단계에서 `componentLib`이 `"astryx"`로 정해졌으면) 시안을 고른 뒤 `references/astryx.md` 2~3절을 수행한다. Astryx를 설치해 연결하고, `DESIGN.md` 값과 고정 규칙(경기천년체, 버튼 반경)을 Astryx 테마 토큰으로 옮긴다. 시안 자체는 Astryx 없이 정적 HTML로 그린다.
 
-- 구성이 끝나면 프로젝트 루트에 마커를 기록한다. 프리셋을 고르지 않았으면 `visualPreset`은 빼거나 `null`로 둔다. `mockMode`에는 고른 방식(`none` / `reference` / `both` / `draft`)을, `mockChoice`에는 고른 시안과 한 줄 요약을, `references`에는 확정한 레퍼런스 URL을 적는다. 레퍼런스를 쓰지 않았거나 레퍼런스 기반이 아닌 시안을 골랐으면 `references`와 `refsNote`는 빼도 된다. `componentLib`에는 `"astryx"` 또는 `"none"`을 적고, Astryx를 쓰면 `astryxTheme`에 바탕으로 삼은 테마 이름을 적는다.
+- 구성이 끝나면 프로젝트 루트에 마커를 기록한다. 프리셋을 고르지 않았으면 `visualPreset`은 빼거나 `null`로 둔다. `mockMode`에는 고른 방식(`none` / `reference` / `both` / `draft`)을, `mockChoice`에는 고른 시안과 한 줄 요약을, `references`에는 확정한 레퍼런스 URL을 적는다. 레퍼런스를 쓰지 않았거나 레퍼런스 기반이 아닌 시안을 골랐으면 `references`와 `refsNote`는 빼도 된다. `surfaceMode`에는 `design-setup.md` 2절에서 정한 화면 성격을 적는다. `componentLib`에는 `"astryx"` 또는 `"none"`을 적고, Astryx를 쓰면 `astryxTheme`에 바탕으로 삼은 테마 이름을 적는다.
 
   ```json
   // .claude/screendoro.json
-  { "impeccableDone": true, "date": "YYYY-MM-DD", "visualPreset": "landing-visual-preset", "mockMode": "both", "mockChoice": "B - 신문 지면형 그리드, 크림 배경, 세리프 제목", "references": ["https://..."], "refsNote": ".claude/screendoro-refs.md", "componentLib": "astryx", "astryxTheme": "neutral" }
+  { "setupDone": true, "date": "YYYY-MM-DD", "surfaceMode": "persuade", "visualPreset": "landing-visual-preset", "mockMode": "both", "mockChoice": "B - 신문 지면형 그리드, 크림 배경, 세리프 제목", "references": ["https://..."], "refsNote": ".claude/screendoro-refs.md", "componentLib": "astryx", "astryxTheme": "neutral" }
   ```
 
-- 이후 이 프로젝트의 어떤 화면 작업에서도 `impeccable`을 **다시 쓰지 않는다**.
+- 이후 이 프로젝트의 어떤 화면 작업에서도 2단계를 **다시 하지 않는다**. 사용자가 리디자인을 요청할 때만 다시 한다.
 
 ## 3. 화면 작성 — `frontend-design:frontend-design` (세션당 1회 로드)
 
@@ -201,7 +201,7 @@ description: 프론트엔드(UI, 웹페이지, 컴포넌트, 화면) 작업의 �
 - 측정하지 않은 성능 수치를 추정해서 적지 않는다.
 - Lighthouse 같은 도구를 사용자에게 묻지 않고 새로 설치하지 않는다.
 - 이미 불러온 스킬을 같은 세션에서 다시 불러오지 않는다.
-- 이미 마커가 있는 프로젝트에서 `impeccable`을 다시 실행하지 않는다.
+- 이미 마커가 있는 프로젝트에서 사용자 요청 없이 2단계를 다시 하지 않는다.
 - 2단계에서 사용자가 시안을 고르기 전에 `DESIGN.md`나 토큰을 확정하지 않는다.
 - 레퍼런스 사이트의 로고·이미지·문구·에셋을 가져오거나, 한 사이트의 레이아웃을 구조째 복제하지 않는다. 패턴과 원리만 가져온다.
 - 레퍼런스 사이트에서 측정하지 않은 값을 측정값처럼 적지 않는다.

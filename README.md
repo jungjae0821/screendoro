@@ -19,7 +19,7 @@ claude plugin install screendoro@screendoro-skills
 | 0 | 프로젝트 마커(`.claude/screendoro.json`)로 최초 구성 여부 확인 | — |
 | 0-1 | 초안 맞추기: 사용자의 초안(요소와 순서, 가장 중요한 것, 레퍼런스)을 먼저 받고, AI 구조안과 다른 부분을 사용자가 판정 (새 화면마다, "초안 없이"로 건너뛸 수 있음) | — |
 | 1 | 랜딩·마케팅 페이지면 기획·구조·문구를 먼저 정리 | — |
-| 2 | 최초 환경 구성: 디자인 방향을 시안 HTML로 비교해 고르고 `DESIGN.md`·토큰에 기록 (프로젝트당 1회, 원하면 갤러리 레퍼런스 활용) | impeccable |
+| 2 | 최초 환경 구성: 디자인 방향을 시안 HTML로 비교해 고르고 `DESIGN.md`·토큰에 기록 (프로젝트당 1회, 원하면 갤러리 레퍼런스 활용) | — (자체 절차 `references/design-setup.md`) |
 | 3 | 화면 작성 (고정 규칙 적용: 경기천년체, 둥근 버튼, 이중 테두리·불필요한 밑줄·장식 금지) | frontend-design |
 | 4 | 슬롭 점검, 고정 규칙 위반 점검·삭제, 실제 렌더링 검증(모바일·태블릿·데스크톱), 공개 페이지면 웹 품질 점검 | antislop, web-quality-skills |
 
@@ -32,7 +32,6 @@ screendoro를 설치하면 아래 플러그인도 각 원작자 저장소에서 
 
 | 플러그인 | 하는 일 | 원작자 저장소 | 라이선스 |
 |---|---|---|---|
-| impeccable | 디자인 방향 설정, 리디자인, 비평·감사, 다듬기, 애니메이션, 디자인 시스템(DESIGN.md) 정리 | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | Apache-2.0 |
 | antislop | AI 티가 나는 패턴을 잡는 점검 스킬 6종: 코어, UI, 문구, 모바일 레이아웃, 접근성(명암비 검사 MCP 포함), 코드 주석 | [miqdadbadjuber/anti-slop](https://github.com/miqdadbadjuber/anti-slop) | MIT |
 | web-quality-skills | 웹 품질 점검 스킬 6종: 종합 감사, 성능, Core Web Vitals, 접근성(WCAG 2.2), SEO, best practices | [addyosmani/web-quality-skills](https://github.com/addyosmani/web-quality-skills) | MIT |
 | frontend-design | Anthropic 공식 프론트엔드 디자인 지침: 미적 방향, 타이포그래피, 템플릿 느낌 피하기 | [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) | Apache-2.0 |
