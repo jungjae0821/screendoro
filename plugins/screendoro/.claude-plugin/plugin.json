@@ -1,6 +1,6 @@
 {
   "name": "screendoro",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "프론트엔드 화면 작업 순서를 강제하는 워크플로 스킬. 초안 맞추기(사용자 초안과 AI 구조안의 차이를 사용자가 판정) → 랜딩 전략(랜딩 작업일 때) → 최초 환경 구성(자체 절차로 디자인 방향·DESIGN.md, 시안 3개 비교) → frontend-design으로 화면 작성 → antislop·렌더링 검증 순서로 진행한다.",
   "author": { "name": "jungjae0821" },
   "dependencies": ["antislop", "web-quality-skills", "frontend-design"]
