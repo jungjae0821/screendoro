@@ -13,6 +13,7 @@
 //   --approved           1280·375 캡처를 .claude/screendoro-approved/ 에 복사 (index.md는 직접 고친다)
 //   --no-full            페이지 전체가 아니라 첫 화면만 캡처
 //   --executable <경로>  Chromium 실행 파일 (환경 변수 SCREENDORO_CHROMIUM 도 된다)
+//   --font <정규식>      house-check가 허용할 폰트 (폰트 예외 프로젝트, house-rules.md 1-1절). 예: --font "경기천년|Pretendard"
 // 종료 코드: 0 실행됨(결과는 JSON으로 판단), 1 페이지를 열지 못함, 2 Playwright 없음
 'use strict';
 const fs = require('fs');
@@ -22,7 +23,7 @@ const { createRequire } = require('module');
 const args = process.argv.slice(2);
 const flag = n => args.includes('--' + n);
 const opt = (n, d) => { const i = args.indexOf('--' + n); return i >= 0 && args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : d; };
-const valued = new Set(['--name', '--out', '--widths', '--executable']);
+const valued = new Set(['--name', '--out', '--widths', '--executable', '--font']);
 const target = args.find((a, i) => !a.startsWith('--') && !valued.has(args[i - 1]));
 if (!target) { console.error('대상 URL이나 HTML 파일 경로가 필요하다. 예: node render-pw.cjs http://localhost:5173 --name home'); process.exit(1); }
 
@@ -111,6 +112,8 @@ const parse = v => { try { return typeof v === 'string' ? JSON.parse(v) : v; } c
       r.smallTouchTargets = await page.evaluate(smallTargetsJs);
       if (!r.layout.viewportMeta) r.layout.warning = 'meta viewport 없음: 휴대폰에서 980px 폭으로 축소돼 보인다. <meta name="viewport" content="width=device-width, initial-scale=1">를 넣는다.';
     }
+    const fontAllow = opt('font', null);
+    if (fontAllow) await page.evaluate(f => { window.__screendoroFont = f; }, fontAllow);
     if (houseCheck) r.houseCheck = parse(await page.evaluate(houseCheck).catch(e => 'house-check 실패: ' + e.message));
     if (designCheck) r.designCheck = parse(await page.evaluate(designCheck).catch(e => 'design-check 실패: ' + e.message));
 
@@ -126,10 +129,13 @@ const parse = v => { try { return typeof v === 'string' ? JSON.parse(v) : v; } c
       r.keyboardFocus = order;
       if (order.length) { const fshot = path.join(outDir, `${name}-${key}-focus.png`); await page.screenshot({ path: fshot }); r.focusScreenshot = fshot; }
       if (flag('perf')) {
-        const p2 = await context.newPage();
+        // 같은 컨텍스트는 방금 불러온 자원이 캐시에 있어 전송량·LCP가 실제보다 작게 나온다. 캐시가 빈 새 컨텍스트에서 잰다.
+        const perfCtx = await browser.newContext({ viewport: { width: w, height: 800 }, deviceScaleFactor: 1 });
+        const p2 = await perfCtx.newPage();
         await p2.goto(url, { waitUntil: 'load', timeout: 30000 }).catch(() => {});
         r.perf = await p2.evaluate(perfJs).catch(e => 'perf 실패: ' + e.message);
-        r.perf_note = '개발 서버나 로컬 파일 측정값이다. 실제 배포 값과 다르다.';
+        r.perf_note = '캐시 없는 첫 방문 기준. 개발 서버나 로컬 파일 측정값이라 실제 배포 값과 다르다.';
+        await perfCtx.close();
       }
     }
     report.widths[key] = r;

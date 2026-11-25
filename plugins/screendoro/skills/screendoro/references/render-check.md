@@ -30,6 +30,9 @@ screendoro 4단계에서 **실제로 화면을 띄워서** 확인하는 절차�
    | `--perf` | 랜딩·공개 페이지 (5절) |
    | `--approved` | 4단계 끝, 시안을 고른 직후. 1280·375 캡처를 `.claude/screendoro-approved/`로 복사한다. `index.md`는 직접 고친다 |
    | `--no-full` | 첫 화면만 캡처할 때 |
+   | `--font "<정규식>"` | 마커에 `fontException`이 있을 때. house-check가 허용할 폰트 (`house-rules.md` 1-1절) |
+
+   `--perf`는 캐시가 빈 새 브라우저 컨텍스트에서 첫 방문 기준으로 잰다.
 
 4. **결과를 읽는다**: JSON은 화면에도 나오고 `.claude/screendoro-render/<이름>-report.json`에도 저장된다. 캡처 PNG는 Read 도구로 열어 **눈으로 본다**. 숫자만 보고 레이아웃이 괜찮다고 판단하지 않는다.
 
