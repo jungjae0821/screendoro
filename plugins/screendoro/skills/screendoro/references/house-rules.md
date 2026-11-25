@@ -99,7 +99,7 @@ antislop 점검과 같은 시점에 한다. 이 문서의 위반은 모두 **필
    - `underline`, `text-decoration`, `border-bottom`, `::after`, `::before`
    - 버튼 스타일의 `border-radius`(또는 `rounded-none`, `rounded-sm`, `rounded`)
    - `font-family`(경기천년체가 아닌 폰트)
-2. **렌더링 검사**: `render-check.md` 순서로 화면을 띄운 뒤, 폭마다 `references/house-check.js` 내용을 `javascript_tool`에 그대로 넣어 실행한다. 읽기만 하고 페이지를 바꾸지 않는다. 결과의 각 목록이 비어 있어야 통과다.
+2. **렌더링 검사**: `render-check.md` 순서로 화면을 띄운 뒤, 폭마다 `references/house-check.js` 내용을 `javascript_tool`에 그대로 넣어 실행한다. Playwright 폴백(`render-pw.cjs`)은 폭마다 자동으로 실행해 결과의 `houseCheck`에 넣는다. 읽기만 하고 페이지를 바꾸지 않는다. 결과의 각 목록이 비어 있어야 통과다.
 3. **눈으로 확인**: 스크립트는 "불필요한 요소"를 다 잡지 못한다. 캡처를 보고 4절 목록에 해당하는 것이 있는지 확인한다.
 4. **수정**: 위반은 지우는 쪽으로 고치되, 지운 자리는 3절 "대신 이렇게"와 4-1절 표의 처리로 채운다. 이중 테두리는 한 겹만 남기고, 불필요한 밑줄과 요소는 삭제한다. 폰트와 버튼 반경은 규칙 값으로 바꾼다.
 5. **재점검**: screendoro 4단계 재점검(1회)에 포함해 고친 화면만 다시 확인한다.
