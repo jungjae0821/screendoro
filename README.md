@@ -19,9 +19,11 @@ claude plugin install screendoro@screendoro-skills
 | 0 | 프로젝트 마커(`.claude/screendoro.json`)로 최초 구성 여부 확인 | — |
 | 0-1 | 초안 맞추기: 사용자의 초안(요소와 순서, 가장 중요한 것, 레퍼런스)을 먼저 받고, AI 구조안과 다른 부분을 사용자가 판정 (새 화면마다, "초안 없이"로 건너뛸 수 있음) | — |
 | 1 | 랜딩·마케팅 페이지면 기획·구조·문구를 먼저 정리 | — |
-| 2 | 최초 환경 구성: 디자인 방향을 시안 HTML로 비교해 고르고 `DESIGN.md`·토큰에 기록 (프로젝트당 1회, 원하면 갤러리 레퍼런스 활용) | — (자체 절차 `references/design-setup.md`) |
-| 3 | 화면 작성: 생성 전에 슬롭 징후 목록을 읽고, 화면별 계획 → 뻔함 점검 → 구현 → 캡처로 자기 비평 1회 (고정 규칙 적용: 경기천년체, 둥근 버튼, 이중 테두리·불필요한 밑줄·장식 금지) | frontend-design |
-| 4 | 슬롭 점검, 고정 규칙 위반 점검·삭제, 실제 렌더링 검증(모바일·태블릿·데스크톱), 공개 페이지면 웹 품질 점검 | antislop, web-quality-skills |
+| 2 | 최초 환경 구성: 페이지 전체 구조 와이어프레임을 먼저 확정하고, 디자인 방향을 시안 HTML(첫 화면 + 대표 섹션)로 비교해 고른 뒤 `DESIGN.md`·토큰·레이아웃 문법과 코드 키트(부품, 섹션 틀)로 굳힘 (프로젝트당 1회, 원하면 갤러리 레퍼런스 활용) | — (자체 절차 `references/design-setup.md`, `references/consistency.md`) |
+| 3 | 화면 작성: 생성 전에 슬롭 징후 목록을 읽고, 화면별 계획(레이아웃 문법의 섹션 유형 선택) → 뻔함 점검 → 코드 키트로 조립 → 캡처·`design-check.js`·승인 화면 비교로 자기 비평 1회. 거절하면 문제인 축만 바꿔 다시 만듦 (고정 규칙 적용: 경기천년체, 둥근 버튼, 이중 테두리·불필요한 밑줄·장식 금지) | frontend-design |
+| 4 | 슬롭 점검, 고정 규칙 위반 점검·삭제, 토큰·레이아웃 문법 측정(`design-check.js`), 실제 렌더링 검증(모바일·태블릿·데스크톱), 공개 페이지면 웹 품질 점검 | antislop, web-quality-skills |
+
+같은 요청에도 화면이 매번 다르게 나오는 "뽑기"를 줄이려고 탐색(시안)은 여러 개를 만들어 고르고, 생산(화면)은 고른 결정을 굳힌 키트와 규칙으로 조립합니다. 절차는 `references/consistency.md`에 있습니다.
 
 초안 절차는 `references/draft-first.md`에, 생성 전에 피할 슬롭 징후는 `references/slop-tells.md`에, 고정 규칙은 `references/house-rules.md`에 있고, 4단계 점검 스크립트는 `references/house-check.js`입니다.
 

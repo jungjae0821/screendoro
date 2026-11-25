@@ -32,6 +32,7 @@ screendoro 4단계에서 **실제로 화면을 띄워서** 확인하는 절차�
   const w = document.documentElement.clientWidth; [...document.querySelectorAll('body *')].filter(e => e.getBoundingClientRect().right > w + 1).slice(0, 10).map(e => e.tagName + '.' + e.className)
   ```
 - 고정 규칙: `references/house-check.js`를 실행해 이중 테두리, 밑줄, 각진 버튼, 경기천년체 적용 여부를 확인한다 (`house-rules.md` 5절).
+- 토큰과 레이아웃 문법: `references/design-check.js`를 실행해 토큰 밖 글자 크기·색·간격·반경과 섹션 구조 반복을 확인한다. 등급은 `consistency.md` 6절 표를 따른다.
 - 글자·요소 겹침, 잘린 문구, 화면 밖으로 나간 버튼
 - 한국어 줄바꿈이 단어 중간에서 끊기지 않는지 (`word-break: keep-all`)
 - 모바일 터치 대상이 손가락으로 누를 만한 크기인지
@@ -80,4 +81,4 @@ LCP와 layout-shift는 `getEntriesByType`로는 나오지 않아서 `buffered: t
 
 ## 6. 기록
 
-각 폭에서 찍은 캡처와 확인 결과는 4단계 항목 정리에 그대로 쓴다. 필수 항목을 고친 뒤 재점검할 때는 **고친 화면과 폭만** 다시 띄워 본다.
+각 폭에서 찍은 캡처와 확인 결과는 4단계 항목 정리에 그대로 쓴다. 데스크톱(1280)과 모바일(375) 캡처는 `.claude/screendoro-approved/`에 "승인 대기"로 저장하고, 승인 캡처와 비교한다 (`consistency.md` 5절). 필수 항목을 고친 뒤 재점검할 때는 **고친 화면과 폭만** 다시 띄워 본다.
