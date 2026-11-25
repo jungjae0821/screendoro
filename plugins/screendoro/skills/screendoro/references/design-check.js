@@ -25,7 +25,30 @@
 
   const names = [...vars.keys()];
   const pick = re => names.filter(n => re.test(n) && !/^--[a-z]+-.*--/.test(n));
-  const rgbOf = c => { const m = c.match(/rgba?\(([^)]+)\)/); if (!m) return null; const [r, g, b, a = '1'] = m[1].split(/[ ,/]+/).filter(Boolean); return { key: `${Math.round(r)},${Math.round(g)},${Math.round(b)}`, a: parseFloat(a) }; };
+  // 색을 sRGB 정수로 바꾼다. rgb()는 바로 읽고, oklch()·color(srgb …)·color-mix 결과처럼
+  // 계산값이 rgb가 아닌 색은 1x1 캔버스에 칠해 픽셀을 읽는다 (Tailwind v4 기본 팔레트가 oklch다).
+  const cv = document.createElement('canvas'); cv.width = cv.height = 1;
+  const cx = cv.getContext('2d', { willReadFrequently: true });
+  const colorCache = new Map();
+  const rgbOf = c => {
+    if (!c || c === 'transparent') return null;
+    if (colorCache.has(c)) return colorCache.get(c);
+    let res = null;
+    const m = c.match(/^rgba?\(([^)]+)\)$/);
+    if (m) {
+      const [r, g, b, a = '1'] = m[1].split(/[ ,/]+/).filter(Boolean);
+      res = { r: Math.round(r), g: Math.round(g), b: Math.round(b), a: parseFloat(a) };
+    } else if (cx) {
+      cx.clearRect(0, 0, 1, 1); cx.fillStyle = '#000'; cx.fillStyle = c; cx.fillRect(0, 0, 1, 1);
+      const d = cx.getImageData(0, 0, 1, 1).data;
+      res = d[3] === 0 ? { r: 0, g: 0, b: 0, a: 0 } : { r: d[0], g: d[1], b: d[2], a: Math.round(d[3] / 255 * 100) / 100 };
+    }
+    if (res) res.key = `${res.r},${res.g},${res.b}`;
+    colorCache.set(c, res);
+    return res;
+  };
+  // 변환 오차(투명도 섞인 색, 색역 변환)를 감안해 채널마다 2까지 같은 색으로 본다.
+  const tokenFor = (map, rgb) => { if (map.has(rgb.key)) return map.get(rgb.key); for (const [k, n] of map) { const [r, g, b] = k.split(',').map(Number); if (Math.abs(r - rgb.r) <= 2 && Math.abs(g - rgb.g) <= 2 && Math.abs(b - rgb.b) <= 2) return n; } return null; };
 
   const colorTokens = new Map();
   for (const n of pick(/^--(color|clr)-/)) { const c = rgbOf(resolve('color', `var(${n})`)); if (c) colorTokens.set(c.key, n); }
@@ -65,8 +88,9 @@
       let usedAccent = false;
       for (const [kind, c] of checks) {
         const rgb = rgbOf(c); if (!rgb || rgb.a === 0) continue;
-        if (!colorTokens.has(rgb.key)) add(offColor, `${kind} rgb(${rgb.key})${rgb.a < 1 ? ' a' + rgb.a : ''}`, e);
-        if (accentKey && rgb.key === accentKey) { usedAccent = true; accentUse.kinds.add(kind); }
+        const tok = tokenFor(colorTokens, rgb);
+        if (!tok) add(offColor, `${kind} rgb(${rgb.key})${rgb.a < 1 ? ' a' + rgb.a : ''}`, e);
+        if (accentName && tok === accentName) { usedAccent = true; accentUse.kinds.add(kind); }
       }
       if (usedAccent) accentUse.elements++;
     }
@@ -90,8 +114,12 @@
     const kids = [...e.children].filter(vis);
     return `${e.tagName}[${s.display}${cols ? ':' + cols : ''}]` + (depth > 0 ? '(' + kids.slice(0, 6).map(k => sig(k, depth - 1)).join(',') + (kids.length > 6 ? ',+' + (kids.length - 6) : '') + ')' : '');
   };
-  const root = document.querySelector('main') || document.body;
-  const sections = [...root.children].filter(e => vis(e) && e.getBoundingClientRect().height > 120 && !/^(HEADER|FOOTER|NAV|SCRIPT|STYLE)$/.test(e.tagName));
+  // 섹션을 담은 상자를 찾는다. <main>이 없는 React/Vite 앱은 body 아래가 <div id="root"> 하나뿐이므로,
+  // 보이는 큰 자식이 하나뿐인 동안 안으로 내려간다 (최대 6단계).
+  const bigKids = el => [...el.children].filter(e => vis(e) && e.getBoundingClientRect().height > 120 && !/^(HEADER|FOOTER|NAV|SCRIPT|STYLE|ASIDE)$/.test(e.tagName));
+  let root = document.querySelector('main') || document.body;
+  for (let i = 0; i < 6; i++) { const k = bigKids(root); if (k.length !== 1) break; root = k[0].querySelector(':scope > main') || k[0]; }
+  const sections = bigKids(root);
   const sectionSigs = sections.map(e => sig(e, 3));
   const repeatedNeighbours = [];
   for (let i = 1; i < sections.length; i++) if (sectionSigs[i] === sectionSigs[i - 1]) repeatedNeighbours.push(`${name(sections[i - 1])} = ${name(sections[i])}`);
