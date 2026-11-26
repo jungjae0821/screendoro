@@ -40,8 +40,11 @@ Whether to commit these is your call. A common choice is to commit `DESIGN.md` a
 
 ## Migration from 1.x
 
-Version 1.x was a single Claude Code plugin (`plugins/screendoro`) that ran every step in one skill and pulled in frontend-design, antislop, web-quality-skills, and Astryx. Version 2 splits it into the skills above, drops the separate landing strategy step and the Astryx, frontend-design, and web-quality-skills dependencies, and moves project files from `.claude/` to `screendoro/`. The 1.x plugin stays in this repository until every 2.x skill is ready.
+Version 1.x was a single Claude Code plugin (`plugins/screendoro`) that ran every step in one skill and pulled in frontend-design, antislop, web-quality-skills, and Astryx. Version 2 splits it into the skills above, drops the separate landing strategy step and the Astryx, frontend-design, and web-quality-skills dependencies, and moves project files from `.claude/` to `screendoro/`. The 1.x plugin and its marketplace file are removed; the last 1.x version is commit `1efd79d` in git history.
 
-## License notice
+If you installed 1.x as a Claude Code plugin, remove it:
 
-This applies to the 1.x plugin only. `plugins/screendoro/skills/screendoro/references/landing-strategy.md` and `landing-visual-preset.md` are translated and adapted from `landing-page-design` (MIT) in [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills). The original notice is in `LICENSE-landing-page-design` in the same folder.
+```bash
+claude plugin uninstall screendoro@screendoro-skills
+claude plugin marketplace remove screendoro-skills
+```
