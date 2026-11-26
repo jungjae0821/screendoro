@@ -1,11 +1,11 @@
-# screendoro-skills
+# screendoro
 
 A set of small agent skills for building frontend screens step by step: the user sketches the structure first, the look is picked from mockups, screens are assembled from a fixed kit, and the result is checked by scripts after the design is done.
 
 Each step is its own skill. Install only the ones you need. The skills follow the open `SKILL.md` format, so they are not tied to one agent.
 
 ```bash
-npx skills add jungjae0821/screendoro-skills
+npx skills add jungjae0821/screendoro
 ```
 
 ## Skills
