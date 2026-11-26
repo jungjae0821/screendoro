@@ -22,9 +22,9 @@ Read `references/house-rules.md` first. Those rules hold in every mockup and in 
 
 4. Draw the whole main screen as a gray-box wireframe in `screendoro/mocks/wireframe.html`: sections in the final-structure order, real copy, item counts, rough heights, and where the first screen ends. No color, font, or decoration. Show it and ask "as is, or what to change". Every mockup keeps this structure.
 
-5. Make three directions that differ in layout, color, type contrast, and mood, not just color. Take each from something the target users know well (a sign system, packaging, a place, a printed form) and follow `references/slop-tells.md`. For each, write one line each for: source, colors, type contrast, layout, texture, risk.
+5. Make three directions that differ in layout, color, type contrast, and mood, not just color. Take each from something the target users know well (a sign system, packaging, a place, a printed form) and follow `references/slop-tells.md`. For each, write one line each for: source, colors, type contrast, layout, texture, risk. If two directions share a layout (both card grids, both plain lists), or one is plain white with gray cards, replace it before drawing.
 
-6. Build each direction as static HTML in `screendoro/mocks/option-a.html` to `option-c.html`: the first screen plus one representative section, the same section in all three. Use the real product name and copy. Do not invent prices, customers, or numbers. Put all three in `screendoro/mocks/index.html` with name and one line each for direction, strength, and risk. Open it for the user.
+6. Build each direction as static HTML in `screendoro/mocks/option-a.html` to `option-c.html`: the first screen plus one representative section, the same section in all three. Use the real product name and copy. Do not invent prices, customers, or numbers. Put all three in `screendoro/mocks/index.html` side by side at their target width and full height, with no scrolling frames inside the page, and give each a name and one line each for direction, strength, and risk. Open it for the user.
 
 7. Let the user pick one. Mixes ("A's layout with B's color") are fine. If they reject, ask which axis is wrong (layout, color, type, density, mood), log their words in `screendoro/feedback.md`, change only that axis, and redraw.
 
@@ -36,7 +36,7 @@ Read `references/house-rules.md` first. Those rules hold in every mockup and in 
 
 9. Generate the token file: `node scripts/tokens.cjs DESIGN.md --out <styles folder>/tokens.css`. Import it once at the app root. Do not hand-copy values.
 
-10. Build a minimal kit in the project's usual component folder (`src/design/` if none): primary and secondary button, input, link, nav, the surface used by this direction, the signature element, and frames only for sections drawn in the mockup. Use tokens only. Put every part with real copy on `screendoro/mocks/kit.html`. List parts and paths in the Kit section of `DESIGN.md`.
+10. Build a minimal kit in the project's usual component folder (`src/design/` if none): primary and secondary button, input, link, nav, the surface used by this direction, the signature element, and frames only for sections drawn in the mockup. Use tokens for every color, size, spacing, and radius, padding included; add a token to `DESIGN.md` and regenerate when one is missing. Put every part with real copy on `screendoro/mocks/kit.html`. List parts and paths in the Kit section of `DESIGN.md`.
 
 ## Rules
 
