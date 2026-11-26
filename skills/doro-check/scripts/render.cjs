@@ -60,7 +60,7 @@ const smallTargetsJs = `(() => [...document.querySelectorAll('a, button, input, 
 
 const focusJs = `(() => { const e = document.activeElement; if (!e || e === document.body) return null; const s = getComputedStyle(e);
   const visible = (s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0) || s.boxShadow !== 'none';
-  return { el: e.tagName.toLowerCase() + (e.id ? '#' + e.id : ''), text: (e.innerText || e.value || e.getAttribute('aria-label') || '').trim().slice(0, 20), visible }; })()`;
+  return { idx: [...document.querySelectorAll('*')].indexOf(e), el: e.tagName.toLowerCase() + (e.id ? '#' + e.id : ''), text: (e.innerText || e.value || e.getAttribute('aria-label') || '').trim().slice(0, 20), visible }; })()`;
 
 const perfJs = `(async () => { await new Promise(r => setTimeout(r, 3000));
   const buffered = type => new Promise(r => { const o = new PerformanceObserver(l => { r(l.getEntries()); o.disconnect(); }); o.observe({ type, buffered: true }); setTimeout(() => r([]), 500); });
@@ -71,7 +71,13 @@ const perfJs = `(async () => { await new Promise(r => setTimeout(r, 3000));
     transferKB: Math.round(res.reduce((s, r) => s + (r.transferSize || 0), 0) / 1024) }; })()`;
 
 const parse = v => { try { return typeof v === 'string' ? JSON.parse(v) : v; } catch { return v; } };
-const short = list => list.slice(0, 3).map(x => Array.isArray(x) ? x.filter(Boolean).join(' ') : String(x)).join('; ') + (list.length > 3 ? ` (+${list.length - 3})` : '');
+// design-check items look like [value, count, [elements]]; house-check items like [element, reason, text].
+const item = x => {
+  if (!Array.isArray(x)) return String(x);
+  if (typeof x[1] === 'number' && Array.isArray(x[2])) return `${x[0]} ×${x[1]} (${[...new Set(x[2])].join(', ')})`;
+  return x.filter(Boolean).join(' ');
+};
+const short = list => list.slice(0, 3).map(item).join('; ') + (list.length > 3 ? ` (+${list.length - 3})` : '');
 
 // Findings are keyed by message so the same issue at several widths becomes one line.
 const found = { required: new Map(), recommended: new Map() };
@@ -144,7 +150,12 @@ function gradeLaunch(l) {
     const context = await browser.newContext({ viewport: { width: w, height: mobile ? 812 : (w < 1000 ? 1024 : 800) }, isMobile: mobile, hasTouch: mobile, deviceScaleFactor: 1, colorScheme: dark ? 'dark' : 'light' });
     const page = await context.newPage();
     const key = w + (dark ? '-dark' : '');
-    page.on('console', m => { if (m.type() === 'error' && !report.consoleErrors.includes(m.text())) report.consoleErrors.push(m.text().slice(0, 200)); });
+    // "Failed to load resource" carries no URL; real failures show up in failedRequests with one.
+    // Browser-initiated requests such as /favicon.ico produce this message without a page request event.
+    page.on('console', m => {
+      const t = m.text().slice(0, 200);
+      if (m.type() === 'error' && !/^Failed to load resource/.test(t) && !report.consoleErrors.includes(t)) report.consoleErrors.push(t);
+    });
     page.on('pageerror', e => report.consoleErrors.push('pageerror: ' + String(e.message).slice(0, 200)));
     page.on('requestfailed', r => report.failedRequests.push(`${r.failure() ? r.failure().errorText : 'failed'} ${r.url().slice(0, 160)}`));
     page.on('response', r => { if (r.status() >= 400) report.failedRequests.push(`${r.status()} ${r.url().slice(0, 160)}`); });
@@ -172,7 +183,7 @@ function gradeLaunch(l) {
         await page.keyboard.press('Tab');
         const f = await page.evaluate(focusJs);
         if (!f) continue;
-        if (order.length && f.el === order[0].el && f.text === order[0].text) break;
+        if (order.some(o => o.idx === f.idx)) break; // wrapped around
         order.push(f);
       }
       r.keyboardFocus = order;
@@ -203,7 +214,7 @@ function gradeLaunch(l) {
   const list = m => [...m].map(([msg, ws]) => ws.size ? `${msg} [${[...ws].join(', ')}]` : msg);
   report.required = list(found.required);
   report.recommended = list(found.recommended);
-  report.notChecked = 'Decorative elements, overlaps, clipped text, Korean line breaks, and interactions: look at the screenshots and click through.';
+  report.notChecked = 'Decorative elements, overlaps, clipped text, Korean line breaks, and interactions: look at the screenshots and click through. Fixed or sticky bars show up mid-page in full-page screenshots; that is the capture, not an overlap.';
 
   const reportPath = path.join(outDir, `${name}-report.json`);
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 1));

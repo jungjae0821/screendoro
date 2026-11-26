@@ -14,7 +14,7 @@ Use this once every screen in the request is built. The scripts decide what is r
 
 1. Serve the screen: start the dev server in the background, or use the HTML file path directly.
 
-2. Check that Playwright is available: `node -e "require.resolve('playwright')"`. If it is missing, ask the user whether to install it. Without it, run `house-check.js`, `design-check.js`, and `launch-check.js` from `scripts/` in any browser you can drive, and report rendering at three widths as unverified.
+2. Check that Playwright is available: `node -e "require.resolve('playwright')"`. If it is missing, ask the user whether to install it. If Playwright is there but its browser is not, pass an installed Chrome or Edge with `--executable <path>`. Without it, run `house-check.js`, `design-check.js`, and `launch-check.js` from `scripts/` in any browser you can drive, and report rendering at three widths as unverified.
 
 3. Run, from the project root, once per screen:
 
