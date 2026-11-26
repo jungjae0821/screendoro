@@ -1,375 +1,47 @@
 # screendoro-skills
 
-프론트엔드 화면을 만들 때 Claude가 지켜야 할 작업 순서를 정해 두는 워크플로 스킬 **screendoro**와, 그것을 Claude Code 플러그인으로 설치하기 위한 마켓플레이스 저장소입니다. 현재 버전은 1.9.0입니다.
+A set of small agent skills for building frontend screens step by step: the user sketches the structure first, the look is picked from mockups, screens are assembled from a fixed kit, and the result is checked by scripts after the design is done.
+
+Each step is its own skill. Install only the ones you need. The skills follow the open `SKILL.md` format, so they are not tied to one agent.
 
 ```bash
-claude plugin marketplace add jungjae0821/screendoro-skills
-claude plugin install screendoro@screendoro-skills
+npx skills add jungjae0821/screendoro-skills
 ```
 
-이 문서는 스킬의 내용을 사람이 읽기 좋게 정리한 것입니다. 스킬이 실제로 따르는 규칙은 `plugins/screendoro/skills/screendoro/` 아래의 `SKILL.md`와 `references/` 문서이고, 둘이 다르면 스킬 문서가 맞습니다.
+## Skills
 
-## 목차
+| Step | Skill | What it does | Status |
+|---|---|---|---|
+| 1 | `doro-draft` | Takes the user's own draft of the screen first, proposes a structure, and lets the user judge every difference | Draft |
+| 2 | `doro-design` | Once per project: mockups to choose from, then `DESIGN.md`, tokens, and a component kit | Draft |
+| 3 | `doro-build` | Plans the screen and assembles it from the kit | Draft |
+| 4 | `doro-check` | After the design is done: render at 375/768/1280 and run the check scripts | Draft |
+| 5 | `doro-report` | Short completion report from the check results | Draft |
 
-1. [한 줄 요약](#1-한-줄-요약)
-2. [구성](#2-구성)
-3. [언제 쓰나](#3-언제-쓰나)
-4. [전체 흐름](#4-전체-흐름)
-5. [고정 규칙](#5-고정-규칙)
-6. [슬롭을 막는 장치](#6-슬롭을-막는-장치)
-7. [뽑기를 줄이는 장치](#7-뽑기를-줄이는-장치)
-8. [측정 도구](#8-측정-도구)
-9. [프로젝트에 남는 파일](#9-프로젝트에-남는-파일)
-10. [완료 보고](#10-완료-보고)
-11. [실제로 쓰면 이런 흐름](#11-실제로-쓰면-이런-흐름)
-12. [한계와 남은 과제](#12-한계와-남은-과제)
-- [업데이트](#업데이트) · [제거](#제거) · [변경 이력](#변경-이력) · [라이선스 고지](#라이선스-고지)
+The usual order is `doro-draft` → (`doro-design`) → `doro-build` → `doro-check` → `doro-report`. Each skill names the next one when it finishes. `doro-design` runs only when the project has no `DESIGN.md` yet. Landing pages follow the same steps; there is no separate landing skill.
 
----
+## Files written to your project
 
-## 1. 한 줄 요약
-
-**프론트엔드 화면을 만들 때 Claude가 지켜야 할 작업 순서를 정해 두는 워크플로 스킬**입니다.
-
-1. 사용자가 먼저 화면 구조를 생각합니다.
-2. 디자인 방향은 시안을 눈으로 보고 고릅니다.
-3. 고른 결정을 코드 키트로 굳혀 둡니다.
-4. 화면은 그 키트를 조립해서 만듭니다.
-5. 마지막에 실제로 띄워서 슬롭과 규칙 위반을 고칩니다.
-
-이 스킬이 막으려는 문제는 세 가지입니다.
-
-| 문제 | screendoro의 대응 |
-|---|---|
-| AI가 먼저 안을 내면 사용자가 그 안을 기준으로만 생각하게 됨 | 0-1단계: 사용자 초안을 먼저 받고, AI안과 다른 곳을 사용자가 판정 |
-| AI 티가 나는 뻔한 화면(슬롭) | 만들기 전에 슬롭 목록을 읽고, 만들면서 점검하고, 만든 뒤 검증 |
-| 같은 요청에도 결과가 매번 다른 "뽑기" | 탐색(시안)은 여러 개 만들어 고르고, 생산(화면)은 키트로 조립 |
-
----
-
-## 2. 구성
-
-### 의존 플러그인
-
-설치 명령은 이 문서 맨 위에 있습니다. screendoro를 설치하면 아래 플러그인도 각 원작자 저장소에서 함께 설치됩니다.
-
-| 플러그인 | 쓰는 단계 | 하는 일 | 원작자 저장소 | 라이선스 |
-|---|---|---|---|---|
-| frontend-design | 2·3단계 | Anthropic 공식 프론트엔드 디자인 지침: 미적 방향, 타이포그래피, 템플릿 느낌 피하기 | [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) | Apache-2.0 |
-| antislop | 4단계 | AI 티가 나는 패턴을 잡는 점검 스킬 6종: 코어, UI, 문구, 모바일 레이아웃, 접근성(명암비 검사 MCP 포함), 코드 주석 | [miqdadbadjuber/anti-slop](https://github.com/miqdadbadjuber/anti-slop) | MIT |
-| web-quality-skills | 4단계 | 웹 품질 점검 스킬 6종: 종합 감사, 성능, Core Web Vitals, 접근성(WCAG 2.2), SEO, best practices | [addyosmani/web-quality-skills](https://github.com/addyosmani/web-quality-skills) | MIT |
-
-플러그인으로 설치한 스킬은 `antislop:antislop-ui`처럼 앞에 플러그인 이름이 붙습니다. 이 저장소에는 원작자 코드를 복사해 두지 않았고, `marketplace.json`에서 원작자 저장소를 가리키기만 합니다. 버전을 고정하지 않아서 항상 원작자의 최신판이 설치됩니다.
-
-**Astryx (선택)**
-React 19 이상 프로젝트에서는 최초 구성 때 [Astryx](https://github.com/meta/astryx)(Meta의 오픈소스 디자인 시스템, 베타, MIT)를 컴포넌트 라이브러리로 쓸지 한 번 묻습니다. 기본값은 쓰지 않음입니다. 쓰기로 하면 0단계에서 마커에 기록하고, 2단계에서 `DESIGN.md`와 고정 규칙을 Astryx 테마 토큰으로 옮기고, 3단계에서 CLI로 컴포넌트를 조회해 조립하고, 4단계에서 Astryx 컴포넌트에도 고정 규칙을 똑같이 검사합니다. 절차는 `references/astryx.md`에 있습니다. Astryx는 플러그인이 아니라 프로젝트의 npm 의존성으로 설치되므로 위 의존 플러그인 목록에는 없습니다.
-
-### 파일 구조
-
-```
-plugins/screendoro/skills/screendoro/
-├── SKILL.md                      단계 지도와 금지 사항
-└── references/
-    ├── draft-first.md            0-1 초안 맞추기
-    ├── landing-strategy.md       1단계 랜딩 전략
-    ├── design-setup.md           2단계 최초 환경 구성
-    ├── design-reference.md       갤러리 레퍼런스 수집
-    ├── landing-visual-preset.md  선택형 시각 프리셋
-    ├── consistency.md            뽑기 줄이기 (와이어프레임, 키트, 피드백, 승인 화면)
-    ├── slop-tells.md             만들기 전에 피할 슬롭 목록
-    ├── house-rules.md            고정 규칙
-    ├── render-check.md           렌더링 검증 절차
-    ├── astryx.md                 Astryx 사용 (선택)
-    ├── house-check.js            고정 규칙 측정
-    ├── design-check.js           토큰·레이아웃 문법 측정
-    ├── design-measure.js         레퍼런스 사이트 측정
-    └── render-pw.cjs             Playwright 렌더링 폴백
-```
-
-`SKILL.md`는 단계 지도 역할만 하고, 자세한 절차는 단계마다 필요한 references 문서만 골라 읽습니다.
-
----
-
-## 3. 언제 쓰나
-
-**씁니다**
-- 새 화면이나 페이지를 만들 때 (웹페이지, 랜딩, 대시보드, 앱 화면)
-- 화면을 크게 재구성할 때
-- `/screendoro`로 직접 부를 때
-- 화면 작업 중에 레퍼런스 URL을 주거나 레퍼런스를 찾아 달라고 할 때
-
-**안 씁니다**
-- 문구 수정, 색·간격 조정, 버그 수정 같은 작은 변경. 이런 건 워크플로 없이 `DESIGN.md`와 고정 규칙에 맞춰 바로 고칩니다.
-
-### 우선순위
-
-규칙이 부딪히면 왼쪽이 이깁니다.
-
-> 사용자 지시 > 고정 규칙(`house-rules.md`) > 사용자 취향 파일 > 프로젝트 `DESIGN.md` > 다른 references 문서 > `frontend-design` 기본값 > Astryx 기본값
-
-0-1단계에서 확정한 구조는 사용자 지시로 봅니다.
-
----
-
-## 4. 전체 흐름
-
-```
-0 상태 확인 → 0-1 초안 맞추기 → 1 랜딩 전략 → 2 최초 환경 구성 → 3 화면 작성 → 4 최종 검증
-              (새 화면마다)      (랜딩일 때만)   (프로젝트당 1회)    (화면마다)     (항상)
-```
-
-### 0단계. 상태 확인
-
-작업을 시작하기 전에 프로젝트가 어떤 상태인지 판별합니다.
-
-- **마커 파일** `.claude/screendoro.json`
-  - `setupDone: true`가 있으면 → 2단계를 건너뜁니다.
-  - 마커가 없는데 프론트엔드가 이미 있으면 → "디자인 방향을 이미 정했는지" 한 번 묻습니다.
-  - 마커도 프론트엔드도 없으면 → 2단계를 수행합니다.
-- **작업 유형**: 랜딩·마케팅 페이지면 1단계를 하고, 앱·대시보드면 건너뜁니다. 애매하면 묻습니다.
-- **Astryx**: 최초 구성이면서 React 19 이상일 때만 쓸지 한 번 묻습니다. 기본값은 쓰지 않음입니다.
-- **키트**: 마커의 `kitPath`로 코드 키트가 있는지 봅니다. 없으면 기존 컴포넌트와 화면을 키트로 봅니다.
-- **거절 기록**: `~/.claude/screendoro-taste.md`와 `.claude/screendoro-feedback.md`가 있으면 읽습니다. 사용자가 전에 거절한 처리를 다시 내지 않기 위해서입니다.
-
-### 0-1단계. 초안 맞추기 (새 화면마다)
-
-**목적:** 화면 구조를 사용자가 먼저 생각하게 합니다. 절차는 `references/draft-first.md`에 있습니다.
-
-1. **초안 받기:** 요소와 순서, 가장 중요한 것 하나, 레퍼런스와 거기서 가져오고 싶은 점을 받습니다. 자유 서술로 받고, AI가 예시나 선택지를 먼저 내지 않습니다. 선택지도 결국 AI가 만든 안이기 때문입니다.
-2. **그대로 기록:** `.claude/screendoro-draft.md`에 사용자의 말을 그대로 적습니다. 정하지 않은 항목은 빈칸으로 둡니다.
-3. **레퍼런스 읽기:** 사용자가 준 URL이나 스크린샷에서 패턴을 뽑습니다.
-4. **구조안 내기:** AI의 구조안을 글로 보여 줍니다. 이때 차이는 표시하지 않고 "다른 곳을 짚어 달라"고만 합니다.
-5. **차이 공개:** 사용자가 먼저 지적합니다. 그다음 AI가 사용자가 짚지 않은 차이(바꿈, 뺌, 채움)를 이유와 함께 **모두** 공개합니다.
-6. **판정:** 차이마다 초안대로 / AI안 / 절충을 받아 "확정 구조"를 기록합니다.
-
-판정이 끝나기 전에는 시안도 코드도 만들지 않습니다. 이 단계는 사용자가 "초안 없이"라고 말할 때만 건너뛰고, AI가 먼저 건너뛰자고 권하지 않습니다.
-
-### 1단계. 랜딩 전략 (랜딩일 때만)
-
-**목적:** 코드보다 기획과 문구를 먼저 정합니다. 원칙은 "제안 하나 → 대상 하나 → 핵심 행동 하나"입니다. 절차는 `references/landing-strategy.md`에 있습니다.
-
-- **사전 질문:** 목적, 대상, 근거 자료, 제약 중 빠진 것만 한 번에 모아서 묻습니다.
-- **코드 전 결과물 7가지:** 페이지 개요, 히어로 문구, 장점, 사용 방법, FAQ, SEO/AEO, 레이아웃 선택과 이유.
-- **사실 주장과 예시 데이터를 구분합니다.**
-  - 사실 주장(고객사, 후기, 가격, 성과 수치, 보증): 사용자가 준 자료만 씁니다. 없으면 **교체 자리**로 둡니다. 화면에 자리를 표시하고, 코드에 `TODO(screendoro)` 주석을 달고, 완료 보고에 목록을 남깁니다.
-  - 예시 데이터(제품 화면 안의 목록, 표 등): 그럴듯하게 만들어 써도 됩니다.
-- 섹션은 "담을 정보"일 뿐 생김새가 아닙니다. 생김새는 3단계 계획에서 정합니다.
-
-### 2단계. 최초 환경 구성 (프로젝트당 1회)
-
-**목적:** 디자인 방향을 눈으로 보고 고른 뒤, 그 결정을 문서와 코드로 굳힙니다. 절차는 `references/design-setup.md`와 `references/consistency.md`에 있습니다.
-
-1. **프로젝트 파악:** 기존 자산을 읽고 네 가지를 정리합니다. 무엇인가, 누가 어디서 쓰나, 첫 화면이 증명할 것, 피할 것.
-2. **화면 성격 정하기:** 설득형 / 작업형 / 읽기형 / 감상형 중 하나를 고릅니다.
-3. **방향 후보 만들기**
-   - 뻔한 길은 후보에서 뺍니다. 업종 관습, 그걸 뒤집기만 한 화면, AI 디자인이 몰리는 다섯 유형이 여기에 해당합니다.
-   - 대상 사용자의 세계에서 시각 체계 6~7개를 뽑습니다. 재료 계열은 3개 이상이어야 합니다(공공 표지, 포장·라벨, 장소, 기록 관습 등).
-4. **시안 방식 선택:** 레퍼런스 없이(기본값) / 레퍼런스 기반 / 둘 다 / 내 초안 기반. 0-1단계를 했으면 묻지 않고 "내 초안 기반"으로 합니다.
-5. **구조 와이어프레임:** 페이지 전체 구조(섹션 구성, 정보량, 첫 화면 범위)를 회색 상자로 먼저 확정합니다.
-6. **시안 3~4개:** 와이어프레임의 구성은 지키고, 배치·색·타이포·분위기는 서로 확연히 다르게 만듭니다. 범위는 첫 화면 + 대표 섹션 1~2개이고, 만든 뒤 슬롭 점검을 한 번 합니다.
-7. **고르기:** 사용자가 하나를 고르거나 조합합니다. 다시 그려 달라고 하면 문제인 축을 묻고 그 축만 바꿉니다.
-8. **`DESIGN.md` 작성:** 토큰(YAML)과 본문 열 절을 씁니다. 값마다 이유와 **승인 표시**를 붙입니다.
-9. **토큰 옮기기:** 변수 이름 규칙(`--color-*`, `--text-*`, `--space-*`, `--radius-*`)으로 코드에 옮깁니다.
-10. **코드 키트:** 기본 부품, 섹션 틀, 카탈로그 페이지를 만듭니다.
-11. **첫 승인 기준:** 고른 시안의 캡처를 `.claude/screendoro-approved/`에 저장합니다.
-12. **마커 기록:** 화면 성격, 시안 선택, 키트 위치 등을 마커에 적습니다.
-
-### 3단계. 화면 작성 (화면마다)
-
-**목적:** 매번 새로 그리지 않고, 정해 둔 것을 조립해서 만듭니다.
-
-시작 전에 `frontend-design` 스킬을 불러오고, 고정 규칙과 `slop-tells.md`를 읽습니다. 그다음 화면마다 이 순서로 진행합니다.
-
-| 순서 | 하는 일 |
-|---|---|
-| **3-1 계획** | 시그니처 요소 하나를 정합니다. 섹션마다 레이아웃 문법의 섹션 유형을 골라 `섹션 → 유형 → 내용`으로 적습니다. 사용자에게 보여 주되 승인은 기다리지 않습니다 |
-| **3-2 뻔함 점검** | 계획의 줄마다 "비슷한 다른 제품이었어도 똑같이 계획했을까?"를 묻고, 그렇다면 고칩니다 |
-| **3-3 조립** | 키트의 부품과 섹션 틀로 구현합니다. 새 틀은 맞는 유형이 없을 때만 만들고 "승인 대기"로 표시합니다 |
-| **3-4 자기 비평 1회** | 캡처를 보고 `design-check.js`를 돌리고, 승인 캡처와 비교해 가장 뻔한 곳 1~3곳을 다시 설계합니다 |
-
-### 4단계. 최종 검증 (구현이 모두 끝난 뒤)
-
-1. `antislop` 코어와, 작업 성격에 맞는 하위 스킬 1개를 불러옵니다(랜딩은 2개).
-2. **고정 규칙 점검:** 코드 검색, `house-check.js`, 눈으로 확인. 지운 장식 자리는 대신할 처리로 채웁니다.
-3. **초안 대조:** 판정 없이 확정 구조와 달라진 곳을 찾습니다.
-4. **렌더링 검증:** 375 / 768 / 1280 폭에서 가로 스크롤, 콘솔, 네트워크, 키보드 포커스를 확인하고 `design-check.js`를 돌립니다. 공개 페이지면 `web-quality-audit`도 적용합니다.
-5. **등급 나누기**
-   - **필수:** 고정 규칙 위반, 확정 구조 이탈, 접근성 위반, 깨진 레이아웃, 지어낸 사실, 토큰 밖 값, 레이아웃 문법 위반, 콘솔 오류, CLS 0.1 초과 등
-   - **권장:** 취향 차원의 슬롭, 성능 개선점
-6. 필수는 모두 고치고, 재점검은 1회만 합니다.
-7. 1280·375 캡처를 "승인 대기"로 저장하고 완료 보고를 합니다.
-
----
-
-## 5. 고정 규칙
-
-`references/house-rules.md`는 모든 프로젝트에 적용되는 사용자의 취향 규칙이고, `DESIGN.md`보다 우선합니다.
-
-| 규칙 | 내용 |
-|---|---|
-| 폰트 | 경기천년제목(제목, 버튼)과 경기천년바탕(본문). 고정폭이 꼭 필요한 곳은 예외입니다. 기존 폰트가 있는 프로젝트, 한글 없는 사이트, 작업형 화면의 작은 글자는 사용자가 고르면 예외로 둡니다(1-1절). 웹폰트 주소를 지어내지 않습니다 |
-| 버튼 | 반경 8px 이상. 알약형은 디자인 방향이 요구할 때만 씁니다. 반경 규칙은 버튼에만 적용되고, 입력창·카드는 위계에 따라 따로 정합니다 |
-| 이중 테두리 금지 | 겹친 선, 테두리 + 그림자, 간격 16px 미만의 테두리 안 테두리. 키보드 포커스 링은 예외입니다 |
-| 장식 금지 | 장식 밑줄, eyebrow 라벨, 장식 아이콘, 블롭, 의미 없는 배지 등. 본문 속 링크의 밑줄은 예외입니다 |
-
-장식을 지우기만 하면 화면이 밋밋해지므로 **"대신 이렇게"** 표가 있습니다. 예를 들어 제목 밑줄을 지웠으면 크기·굵기 대비와 여백으로 제목을 살리고, 구분선을 지웠으면 여백 차이와 면 색으로 섹션을 나눕니다.
-
----
-
-## 6. 슬롭을 막는 장치
-
-| 시점 | 장치 |
-|---|---|
-| 만들기 전 | `slop-tells.md`: AI 디자인이 몰리는 다섯 유형(크림+세리프+테라코타, 검정+형광, 신문 지면형, SaaS 카드 세트, 템플릿 장식)과 징후 목록 |
-| 만들면서 | 3-1 계획에서 시그니처를 정하고, 3-2 뻔함 점검, 3-4 자기 비평 |
-| 만든 뒤 | 4단계 antislop 원문 점검, 측정 스크립트 |
-| 면책 기준 | **승인 표시가 있는 값만** "목적 있는 선택"으로 보고 넘어갑니다 |
-
-### 승인 표시
-
-`DESIGN.md`의 값마다 끝에 붙입니다.
-
-- `[승인: 시안 X]`: 사용자가 고른 시안에 실제로 보였던 값
-- `[승인: 사용자 지시]`: 사용자가 말로 정한 값
-- `[승인: 프리셋]`: 사용자가 고른 프리셋에서 옮긴 값
-- `[AI]`: AI가 채운 값. 다른 값과 똑같이 슬롭 점검을 받습니다
-
-이유는 AI가 얼마든지 지어 붙일 수 있습니다. 그래서 면책 기준을 "이유가 적혀 있는가"가 아니라 "사용자가 그 값을 보거나 정했는가"로 정했습니다.
-
----
-
-## 7. 뽑기를 줄이는 장치
-
-`references/consistency.md`에 있습니다. 원칙은 **탐색은 뽑기로, 생산은 조립으로**입니다.
-
-| 장치 | 역할 |
-|---|---|
-| 구조 와이어프레임 | 구조와 스타일을 따로 정합니다. 첫 화면 아래 구조도 사용자가 고르게 됩니다 |
-| 레이아웃 문법 (`DESIGN.md` 9절) | 그리드, 섹션 리듬, 섹션 유형(ASCII 와이어프레임), 시그니처 규격, 밀도 |
-| 코드 키트 | 결정을 코드로 굳힙니다. 화면은 키트를 조립해서 만들고, 새 모양은 승인을 거쳐 키트에 추가합니다 |
-| 거절 피드백 | 다시 그릴 때 문제인 축만 바꾸고 기록합니다. 같은 실수를 반복하지 않습니다 |
-| 승인 화면 | 실제 캡처를 기준으로 남깁니다. 세션이 바뀌어도 "같은 제품처럼 보이는지" 비교할 수 있습니다 |
-
----
-
-## 8. 측정 도구
-
-모두 읽기 전용입니다.
-
-| 도구 | 재는 것 | 쓰는 곳 |
+| Path | Written by | Contents |
 |---|---|---|
-| `house-check.js` | 이중 테두리, 장식 밑줄, 각진 버튼, 경기천년체 적용과 로드 | 4단계 |
-| `design-check.js` | 토큰 밖 글자 크기·색·간격·반경, 구조가 같은 섹션의 연속, 같은 카드 묶음, 강조색 범위 | 3-4, 4단계, 키트 카탈로그 |
-| `design-measure.js` | 레퍼런스 사이트의 폰트, 크기 단계, 색, 모션 | 레퍼런스 수집 |
-| `render-pw.cjs` | 브라우저 패널이 없을 때 위 항목을 한 번에: 폭별 캡처, 가로 스크롤, 콘솔·네트워크, 포커스, 성능, 승인 캡처 복사 | CLI·클라우드 환경 |
+| `DESIGN.md` | `doro-design` | Design decisions and token values |
+| `screendoro/draft.md` | `doro-draft` | The user's draft, word for word, and the judged structure |
+| `<styles>/tokens.css` | `doro-design` | CSS variables generated from `DESIGN.md` |
+| `screendoro/mocks/` | `doro-design` | Wireframe, mockups, and kit catalog |
+| `screendoro/feedback.md` | `doro-design` | Why the user rejected a mockup, in their words |
+| `screendoro/render/` | `doro-check` | Screenshots and check results (JSON) |
 
-브라우저 패널이 있으면 패널로 띄웁니다. 없으면 `render-pw.cjs`를 씁니다(Playwright가 설치돼 있을 때만). 둘 다 안 되면 "미검증"으로 보고하고, 확인하지 않은 걸 확인했다고 쓰지 않습니다.
+Whether to commit these is your call. A common choice is to commit `DESIGN.md` and `screendoro/draft.md` and ignore `screendoro/mocks/` and `screendoro/render/`.
 
-`render-pw.cjs`는 프로젝트 루트에서 이렇게 실행합니다.
+## Requirements
 
-```bash
-node <스킬 폴더>/references/render-pw.cjs http://localhost:5173/pricing --name pricing
-node <스킬 폴더>/references/render-pw.cjs .claude/screendoro-mocks/option-b.html --name sian-b --widths 1280,375
-```
+- `doro-check` needs Node 18+ and Playwright. It does not install them for you.
+- [antislop](https://github.com/miqdadbadjuber/anti-slop) is optional. `doro-check` uses it if it is installed.
 
-옵션: `--widths`, `--dark`, `--perf`, `--approved`, `--no-full`, `--executable`. 자세한 내용은 `references/render-check.md` 1-1절에 있습니다.
+## Migration from 1.x
 
----
+Version 1.x was a single Claude Code plugin (`plugins/screendoro`) that ran every step in one skill and pulled in frontend-design, antislop, web-quality-skills, and Astryx. Version 2 splits it into the skills above, drops the separate landing strategy step and the Astryx, frontend-design, and web-quality-skills dependencies, and moves project files from `.claude/` to `screendoro/`. The 1.x plugin stays in this repository until every 2.x skill is ready.
 
-## 9. 프로젝트에 남는 파일
+## License notice
 
-| 파일 | 만드는 때 | 내용 |
-|---|---|---|
-| `.claude/screendoro.json` | 2단계 끝 | 마커: 구성 여부, 화면 성격, 시안 선택, 키트 위치 등 |
-| `.claude/screendoro-draft.md` | 0-1단계 | 초안 원문, AI 구조안, 차이와 판정, 확정 구조 |
-| `.claude/screendoro-refs.md` | 레퍼런스를 쓸 때 | 사이트별 측정값과 관찰, 공통 패턴 |
-| `.claude/screendoro-feedback.md` | 거절할 때 | 문제인 축, 사용자 말, 바꾼 것 |
-| `.claude/screendoro-mocks/` | 2단계 | 와이어프레임, 시안, 비교 페이지, 키트 카탈로그 |
-| `.claude/screendoro-render/` | 렌더링 폴백 | 캡처와 결과 JSON |
-| `.claude/screendoro-approved/` | 시안 선택, 4단계 끝 | 승인 캡처와 `index.md` |
-| `DESIGN.md` | 2단계 | 토큰, 본문 열 절, 승인 표시 |
-| 키트 폴더 (`src/design/` 등) | 2단계 | 토큰, 부품, 섹션 틀 |
-| `~/.claude/screendoro-taste.md` | 허락받은 뒤 | 여러 프로젝트에 적용할 취향 |
-
-git에 올릴지는 사용자가 정합니다. 스킬은 `.gitignore`를 묻지 않고 고치지 않습니다.
-
----
-
-## 10. 완료 보고
-
-3~5줄 안팎으로 끝냅니다.
-
-```
-단계: 0-1 수행 · 1 수행 · 2 수행 · 3 화면 1개(뻔함 점검 수정 2 · 자기 비평 캡처 기준) · 4 수행
-초안: 차이 4건(사용자 지적 2 · AI 공개 2) → 초안대로 3 · 절충 1
-검증: 375/768/1280 확인 · 콘솔 오류 0 · CLS 0.01, LCP 1.2s(개발 서버)
-수정: 필수 3건(고정 규칙: 제목 밑줄 삭제 1)
-키트: 섹션 유형 4종 사용 · 새 틀 1개(승인 대기)
-실제 자료로 바꿀 것: 고객 후기 2개, 고객사 로고 줄
-```
-
-필요하면 남은 권장 항목, `[AI]` 값 목록, 시안 방식도 함께 적습니다.
-
----
-
-## 11. 실제로 쓰면 이런 흐름
-
-새 프로젝트에서 랜딩 하나를 만드는 경우입니다.
-
-1. 사용자: "우리 서비스 랜딩 만들어줘"
-2. Claude가 초안을 요청합니다. 요소와 순서, 가장 중요한 것, 레퍼런스에 더해 랜딩 사전 질문 중 빠진 것도 함께 묻습니다.
-3. 사용자가 초안을 주면, Claude가 구조안을 보여 줍니다 → 사용자가 다른 곳을 지적 → Claude가 나머지 차이 공개 → 판정
-4. Claude가 랜딩 결과물 7가지를 냅니다.
-5. Claude가 와이어프레임을 보여 주고 확정합니다.
-6. 시안 3개를 비교 페이지로 보여 주고, 사용자가 하나를 고릅니다.
-7. Claude가 `DESIGN.md`, 토큰, 키트를 만듭니다. 여기서는 묻지 않습니다.
-8. 계획 → 점검 → 조립 → 자기 비평
-9. 4단계 검증과 수정 후 완료 보고
-
-사용자에게 묻는 횟수는 대략 6~8번입니다. 같은 프로젝트의 다음 화면부터는 2단계가 없으므로 초안 맞추기와 결과 확인 정도로 줄어듭니다.
-
----
-
-## 12. 한계와 남은 과제
-
-- **진행 비용이 큽니다.** 첫 랜딩 하나에 질문이 많고, 읽는 문서도 많습니다.
-- **경기천년체 파일을 구할 방법이 없습니다.** 확인된 배포처가 문서에 없어서, 사용자가 파일을 주지 않으면 폴백 폰트로 나옵니다.
-- **비대화형 실행 분기가 없습니다.** 서브에이전트나 자동화 환경에서는 0-1단계에서 응답을 기다리며 멈춥니다.
-- **점검 스크립트는 휴리스틱입니다.** 1.9.0에서 면 없는 버튼, 상태 표시선, 표 테두리, 문장 속 링크 오탐과 oklch 색·`main` 없는 앱 누락을 고쳤지만, 남은 오탐은 "house-check 오탐"으로 보고하고 고치지 않게 했습니다.
-- **렌더링 폴백은 Playwright가 있어야 동작합니다.** CTA 클릭, 폼 제출, 모바일 메뉴 같은 상호작용 일부는 자동화하지 않았습니다.
-- **실제 프로젝트에서 처음부터 끝까지 돌려 본 적은 아직 없습니다.** 지금까지는 문서와 측정 스크립트만 검증했습니다.
-
----
-
-## 업데이트
-
-스킬을 고친 뒤 `plugins/screendoro/.claude-plugin/plugin.json`의 `version`을 올리고, 이 README의 해당 설명과 변경 이력도 같이 고친 뒤 push합니다. 설치한 쪽에서는 아래 명령으로 받습니다.
-
-```bash
-claude plugin marketplace update screendoro-skills
-claude plugin update screendoro@screendoro-skills
-```
-
-## 제거
-
-```bash
-claude plugin uninstall screendoro@screendoro-skills --prune
-```
-
-`--prune`은 함께 설치된 의존 플러그인 중 더 이상 필요 없는 것을 같이 지웁니다.
-
-## 변경 이력
-
-| 버전 | 주요 변경 |
-|---|---|
-| 1.4.0 | impeccable 의존 제거, 최초 환경 구성을 자체 절차로 교체 |
-| 1.5.0 | 슬롭 예시 교체, `slop-tells.md` 추가, 3단계 계획·점검·자기 비평 절차 |
-| 1.6.0 | 고정 규칙에 "대신 이렇게" 추가, 알약형 기본값 삭제, 슬롭 면책을 승인 표시로 한정 |
-| 1.6.1 | 랜딩 전략의 사실 주장과 예시 데이터 구분, 교체 자리 도입 |
-| 1.7.0 | 뽑기 줄이기: 와이어프레임, 레이아웃 문법, 코드 키트, 거절 피드백, 승인 화면, `design-check.js` |
-| 1.8.0 | 렌더링 검증 Playwright 폴백 `render-pw.cjs` |
-| 1.9.0 | 점검 스크립트 오탐·누락 수정(oklch 색, main 없는 앱, 면 없는 버튼, 상태 표시선, 캐시 없는 성능 측정), 폰트 예외와 기존 프로젝트 처리, 프리셋·랜딩 구조의 슬롭 충돌 해소, 초안 간단 모드, "알아서" 뜻 통일, 삭제 전 확인 |
-
-## 라이선스 고지
-
-`plugins/screendoro/skills/screendoro/references/landing-strategy.md`와 `landing-visual-preset.md`는 [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills)의 `landing-page-design`(MIT)을 번역·수정한 것입니다. 원문 고지는 같은 폴더의 `LICENSE-landing-page-design`에 있습니다.
+This applies to the 1.x plugin only. `plugins/screendoro/skills/screendoro/references/landing-strategy.md` and `landing-visual-preset.md` are translated and adapted from `landing-page-design` (MIT) in [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills). The original notice is in `LICENSE-landing-page-design` in the same folder.
