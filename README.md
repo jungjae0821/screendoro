@@ -14,7 +14,7 @@ npx skills add jungjae0821/screendoro-skills
 |---|---|---|---|
 | 1 | `doro-draft` | Takes the user's own draft of the screen first, proposes a structure, and lets the user judge every difference | Draft |
 | 2 | `doro-design` | Once per project: mockups to choose from, then `DESIGN.md`, tokens, and a component kit | Draft |
-| 3 | `doro-build` | Plans the screen and assembles it from the kit | Planned |
+| 3 | `doro-build` | Plans the screen and assembles it from the kit | Draft |
 | 4 | `doro-check` | After the design is done: render at 375/768/1280 and run the check scripts | Planned |
 | 5 | `doro-report` | Short completion report from the check results | Planned |
 
