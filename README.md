@@ -13,13 +13,12 @@ npx skills add jungjae0821/screendoro-skills
 | Step | Skill | What it does | Status |
 |---|---|---|---|
 | 1 | `doro-draft` | Takes the user's own draft of the screen first, proposes a structure, and lets the user judge every difference | Draft |
-| 2 | `doro-landing` | Landing pages only: message, sections, and copy before any code | Planned |
-| 3 | `doro-design` | Once per project: mockups to choose from, then `DESIGN.md`, tokens, and a component kit | Planned |
-| 4 | `doro-build` | Plans the screen and assembles it from the kit | Planned |
-| 5 | `doro-check` | After the design is done: render at 375/768/1280 and run the check scripts | Planned |
-| 6 | `doro-report` | Short completion report from the check results | Planned |
+| 2 | `doro-design` | Once per project: mockups to choose from, then `DESIGN.md`, tokens, and a component kit | Planned |
+| 3 | `doro-build` | Plans the screen and assembles it from the kit | Planned |
+| 4 | `doro-check` | After the design is done: render at 375/768/1280 and run the check scripts | Planned |
+| 5 | `doro-report` | Short completion report from the check results | Planned |
 
-The usual order is `doro-draft` → (`doro-landing`) → (`doro-design`) → `doro-build` → `doro-check` → `doro-report`. Each skill names the next one when it finishes. `doro-landing` runs only for landing pages, and `doro-design` only when the project has no `DESIGN.md` yet.
+The usual order is `doro-draft` → (`doro-design`) → `doro-build` → `doro-check` → `doro-report`. Each skill names the next one when it finishes. `doro-design` runs only when the project has no `DESIGN.md` yet. Landing pages follow the same steps; there is no separate landing skill.
 
 ## Files written to your project
 
@@ -39,8 +38,8 @@ Whether to commit these is your call. A common choice is to commit `DESIGN.md` a
 
 ## Migration from 1.x
 
-Version 1.x was a single Claude Code plugin (`plugins/screendoro`) that ran every step in one skill and pulled in frontend-design, antislop, web-quality-skills, and Astryx. Version 2 splits it into the skills above, drops the Astryx, frontend-design, and web-quality-skills dependencies, and moves project files from `.claude/` to `screendoro/`. The 1.x plugin stays in this repository until every 2.x skill is ready.
+Version 1.x was a single Claude Code plugin (`plugins/screendoro`) that ran every step in one skill and pulled in frontend-design, antislop, web-quality-skills, and Astryx. Version 2 splits it into the skills above, drops the separate landing strategy step and the Astryx, frontend-design, and web-quality-skills dependencies, and moves project files from `.claude/` to `screendoro/`. The 1.x plugin stays in this repository until every 2.x skill is ready.
 
 ## License notice
 
-`plugins/screendoro/skills/screendoro/references/landing-strategy.md` and `landing-visual-preset.md` are translated and adapted from `landing-page-design` (MIT) in [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills). The original notice is in `LICENSE-landing-page-design` in the same folder.
+This applies to the 1.x plugin only. `plugins/screendoro/skills/screendoro/references/landing-strategy.md` and `landing-visual-preset.md` are translated and adapted from `landing-page-design` (MIT) in [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills). The original notice is in `LICENSE-landing-page-design` in the same folder.

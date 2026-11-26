@@ -3,8 +3,8 @@ name: doro-draft
 description: Get the user's own draft of a new screen or page before proposing anything, then settle the structure together.
 metadata:
   version: "2.0.0-draft"
-  step: "1 of 6"
-  next: "doro-landing, doro-design, or doro-build"
+  step: "1 of 5"
+  next: "doro-design or doro-build"
 ---
 
 Use this whenever a new screen or page is built or its sections are rearranged. Skip it for copy, color, spacing, or bug fixes.
@@ -18,7 +18,9 @@ Do not propose a structure, layout, example, or options before the user's draft 
    - the one most important thing
    - references (URL or screenshot) and what to take from each
 
-   Ask only these three lines, with no preamble, no explanation of this process, and no hints of what could go on the screen (no "for example, social login or terms"). End with one line, in the user's language, saying they can skip by asking for no draft. If the first message already covers some of this, ask only for what is missing. Any form counts: a list, a sketch photo, a sentence.
+   For a landing or marketing page, add one line asking for the one action visitors should take, who they are, and what they get.
+
+   Ask only these lines, with no preamble, no explanation of this process, and no hints of what could go on the screen (no "for example, social login or terms"). End with one line, in the user's language, saying they can skip by asking for no draft. If the first message already covers some of this, ask only for what is missing. Any form counts: a list, a sketch photo, a sentence.
 
 2. If the elements or the most important thing are still missing, ask once more for just that, with no examples. Leave whatever stays unanswered blank.
 
@@ -41,7 +43,7 @@ Do not propose a structure, layout, example, or options before the user's draft 
    - "you decide": use the AI version for every open difference and list which ones, so the user can revert.
    - "use mine": use the draft for every open difference. Leave out filled items except filled blanks.
 
-9. Write the final structure under "Final structure". Make nothing (no strategy, mockup, or code) until every verdict is in.
+9. Write the final structure under "Final structure". Make nothing (no mockup or code) until every verdict is in.
 
 ## Skipping
 
@@ -59,4 +61,4 @@ Use it when `DESIGN.md` and a component kit already exist and the screen is a wo
 
 The final structure counts as a user instruction: it outranks `DESIGN.md` and any default section order. If a later step needs to change it, tell the user first, get a verdict, and append it to the table.
 
-This skill ends at the final structure. Do not build the screen here. Hand off to the next skill: `doro-landing` for a landing or marketing page, otherwise `doro-design` if the project has no `DESIGN.md`, or `doro-build` if it does. If that skill is not installed, tell the user which one is missing and ask before building without it.
+This skill ends at the final structure. Do not build the screen here. Hand off to the next skill: `doro-design` if the project has no `DESIGN.md`, or `doro-build` if it does. If that skill is not installed, tell the user which one is missing and ask before building without it.
