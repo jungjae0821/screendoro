@@ -13,7 +13,7 @@ npx skills add jungjae0821/screendoro-skills
 | Step | Skill | What it does | Status |
 |---|---|---|---|
 | 1 | `doro-draft` | Takes the user's own draft of the screen first, proposes a structure, and lets the user judge every difference | Draft |
-| 2 | `doro-design` | Once per project: mockups to choose from, then `DESIGN.md`, tokens, and a component kit | Planned |
+| 2 | `doro-design` | Once per project: mockups to choose from, then `DESIGN.md`, tokens, and a component kit | Draft |
 | 3 | `doro-build` | Plans the screen and assembles it from the kit | Planned |
 | 4 | `doro-check` | After the design is done: render at 375/768/1280 and run the check scripts | Planned |
 | 5 | `doro-report` | Short completion report from the check results | Planned |
@@ -26,7 +26,9 @@ The usual order is `doro-draft` → (`doro-design`) → `doro-build` → `doro-c
 |---|---|---|
 | `DESIGN.md` | `doro-design` | Design decisions and token values |
 | `screendoro/draft.md` | `doro-draft` | The user's draft, word for word, and the judged structure |
-| `screendoro/mocks/` | `doro-design` | Wireframes and mockups |
+| `<styles>/tokens.css` | `doro-design` | CSS variables generated from `DESIGN.md` |
+| `screendoro/mocks/` | `doro-design` | Wireframe, mockups, and kit catalog |
+| `screendoro/feedback.md` | `doro-design` | Why the user rejected a mockup, in their words |
 | `screendoro/render/` | `doro-check` | Screenshots and check results (JSON) |
 
 Whether to commit these is your call. A common choice is to commit `DESIGN.md` and `screendoro/draft.md` and ignore `screendoro/mocks/` and `screendoro/render/`.
