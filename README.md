@@ -27,6 +27,7 @@ Running the command again updates the skill. Node 16.7 or later is required.
 ## Rules
 
 - Text uses the Gyeonggi Cheonnyeon font (경기천년체), loaded from the web.
+- Buttons have rounded corners.
 - No pill-shaped buttons.
 - No subtitle or description text under a title.
 - No double borders.

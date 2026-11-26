@@ -11,6 +11,7 @@ description: >-
 Follow every rule below on every screen.
 
 - Use the Gyeonggi Cheonnyeon font (경기천년체), loaded from the web with the CSS below. Headings use `GyeonggiTitleM`, body text uses `GyeonggiBatang`.
+- Buttons have rounded corners.
 - No pill-shaped buttons.
 - No subtitle or description text under a title.
 - No double borders.
